@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Django
+villagefund_backend/db.sqlite3
+villagefund_backend/media/
+villagefund_backend/staticfiles/
+
+# Environment Variables (NEVER commit these)
+.env
+.env.local
+.env.production
+villagefund_backend/.env
+villagefund_frontend/.env.local
+villagefund_frontend/.env.production
+
+# Node
+node_modules/
+villagefund_frontend/dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 255 107 0;      /* #FF6B00 */
+    --color-secondary: 26 107 60;    /* #1A6B3C */
+    --color-background: 250 250 247; /* #FAFAF7 */
+    --color-surface: 255 255 255;    /* #FFFFFF */
+    --color-text: 28 28 28;          /* #1C1C1C */
+    --color-text-muted: 107 114 128; /* gray-500 */
+    --color-border: 243 244 246;     /* gray-100 */
+  }
+
+  .dark {
+    --color-primary: 255 125 38;     /* Lighter orange for dark mode */
+    --color-secondary: 32 135 76;    /* Lighter green for dark mode */
+    --color-background: 15 23 42;    /* Slate-900 */
+    --color-surface: 30 41 59;       /* Slate-800 */
+    --color-text: 248 250 252;       /* Slate-50 */
+    --color-text-muted: 148 163 184; /* Slate-400 */
+    --color-border: 51 65 85;        /* Slate-700 */
+  }
+
+  body {
+    @apply bg-background text-text transition-colors duration-300;
+  }
+}
