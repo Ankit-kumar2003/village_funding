@@ -18,6 +18,7 @@ import Leaderboard from './pages/Leaderboard';
 // Auth Pages
 import Login from './pages/Login';
 import Register from './pages/Register';
+import SSOLogin from './pages/SSOLogin';
 
 // Protected/User Pages
 import Dashboard from './pages/Dashboard';
@@ -51,6 +52,7 @@ function App() {
               
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/sso-login" element={<SSOLogin />} />
               
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />

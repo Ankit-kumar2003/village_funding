@@ -133,3 +133,35 @@ class LeaderboardView(views.APIView):
             ]
         }
         return Response(data)
+
+from django.shortcuts import redirect
+import urllib.parse
+from django.conf import settings
+
+class AdminSSOView(views.APIView):
+    permission_classes = (AllowAny,)
+    
+    def get(self, request):
+        if not request.user.is_authenticated:
+            # If not logged into Django Admin, just redirect to normal frontend login
+            return redirect("https://village-funding.vercel.app/login")
+            
+        refresh = RefreshToken.for_user(request.user)
+        access = str(refresh.access_token)
+        
+        # Build URL with tokens
+        base_url = "https://village-funding.vercel.app/sso-login"
+        
+        # If running locally, we can redirect to localhost for testing
+        if settings.DEBUG and "localhost" in request.get_host():
+            base_url = "http://localhost:5173/sso-login"
+            
+        params = {
+            'access': access,
+            'refresh': str(refresh),
+            'full_name': request.user.full_name or 'Admin',
+            'role': request.user.role
+        }
+        
+        url = f"{base_url}?{urllib.parse.urlencode(params)}"
+        return redirect(url)
