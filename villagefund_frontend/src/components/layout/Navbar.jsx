@@ -45,6 +45,11 @@ export default function Navbar() {
           
           {user ? (
             <>
+              {(user.role === 'SUPER_ADMIN' || user.role === 'TREASURER') && (
+                <Link to="/admin" className="text-sm font-medium text-accent hover:text-white transition-colors">
+                  Admin Panel
+                </Link>
+              )}
               <Link to="/dashboard" className="text-sm font-medium hover:text-accent transition-colors">
                 Hi, {user.full_name?.split(' ')[0]}
               </Link>
