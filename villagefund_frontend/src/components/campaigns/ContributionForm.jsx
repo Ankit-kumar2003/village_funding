@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { createContribution } from '../../api/contributions';
 
-export default function ContributionForm({ campaignId }) {
+export default function ContributionForm({ campaignId, qrImage }) {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -67,9 +67,13 @@ export default function ContributionForm({ campaignId }) {
           <div className="bg-gray-50 p-4 rounded-md border border-gray-200 text-sm mb-4">
             <p className="font-medium text-text mb-2">Scan & Pay to Village Account</p>
             <div className="flex justify-center my-4">
-              <div className="w-32 h-32 bg-gray-300 flex items-center justify-center text-gray-500 rounded-md border-2 border-dashed border-gray-400">
-                [QR Code]
-              </div>
+              {qrImage ? (
+                <img src={qrImage} alt="UPI QR Code" className="w-32 h-32 object-contain rounded-md border-2 border-gray-200" />
+              ) : (
+                <div className="w-32 h-32 bg-gray-300 flex items-center justify-center text-gray-500 rounded-md border-2 border-dashed border-gray-400">
+                  [No QR]
+                </div>
+              )}
             </div>
             <p className="text-center text-gray-600 font-mono">UPI: sundarpur@sbi</p>
           </div>
