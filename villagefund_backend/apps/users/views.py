@@ -18,34 +18,57 @@ class RegisterView(generics.CreateAPIView):
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
-class GoogleLoginMockView(views.APIView):
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
+from django.conf import settings
+
+class GoogleLoginView(views.APIView):
     permission_classes = (AllowAny,)
     
     def post(self, request):
         serializer = GoogleLoginSerializer(data=request.data)
         if serializer.is_valid():
             credential = serializer.validated_data['credential']
-            # MOCK LOGIC: We accept any credential and use a mock email
-            email = f"mock_{uuid.uuid4().hex[:6]}@gmail.com"
-            user, created = User.objects.get_or_create(
-                email=email,
-                defaults={
-                    'username': email,
-                    'full_name': 'Google Mock User',
-                    'role': 'CONTRIBUTOR',
-                    'google_id': credential[:20]
-                }
-            )
-            if created:
-                ContributionStreak.objects.create(user=user)
-            
-            refresh = RefreshToken.for_user(user)
-            return Response({
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-                'role': user.role,
-                'full_name': user.full_name,
-            })
+            try:
+                # Verify the token with Google
+                idinfo = id_token.verify_oauth2_token(
+                    credential, 
+                    google_requests.Request(), 
+                    settings.GOOGLE_CLIENT_ID
+                )
+                
+                email = idinfo['email']
+                name = idinfo.get('name', 'Google User')
+                google_id = idinfo['sub']
+                
+                user, created = User.objects.get_or_create(
+                    email=email,
+                    defaults={
+                        'username': email,
+                        'full_name': name,
+                        'role': 'CONTRIBUTOR',
+                        'google_id': google_id
+                    }
+                )
+                
+                if created:
+                    ContributionStreak.objects.create(user=user)
+                else:
+                    # Update name/google_id if changed
+                    user.full_name = name
+                    user.google_id = google_id
+                    user.save()
+                
+                refresh = RefreshToken.for_user(user)
+                return Response({
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token),
+                    'role': user.role,
+                    'full_name': user.full_name,
+                })
+            except ValueError:
+                return Response({'error': 'Invalid Google token'}, status=status.HTTP_400_BAD_REQUEST)
+                
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
