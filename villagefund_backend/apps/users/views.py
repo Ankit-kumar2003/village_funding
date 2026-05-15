@@ -137,8 +137,10 @@ class LeaderboardView(views.APIView):
 from django.shortcuts import redirect
 import urllib.parse
 from django.conf import settings
+from rest_framework.authentication import SessionAuthentication
 
 class AdminSSOView(views.APIView):
+    authentication_classes = [SessionAuthentication]
     permission_classes = (AllowAny,)
     
     def get(self, request):
