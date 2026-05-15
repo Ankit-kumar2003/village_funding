@@ -127,7 +127,7 @@ export default function CampaignDetail() {
                 <span className="font-medium">Ends: {new Date(campaign.end_date).toLocaleDateString()}</span>
               </div>
 
-              <ContributionForm campaignId={campaign.id} qrImage={campaign.campaign_qr_image} />
+              <ContributionForm campaignId={campaign.id} qrImage={campaign.campaign_qr_image} upiId={campaign.campaign_upi_id} />
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 mt-6">

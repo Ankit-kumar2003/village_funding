@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { createContribution } from '../../api/contributions';
 
-export default function ContributionForm({ campaignId, qrImage }) {
+export default function ContributionForm({ campaignId, qrImage, upiId }) {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -75,7 +75,9 @@ export default function ContributionForm({ campaignId, qrImage }) {
                 </div>
               )}
             </div>
-            <p className="text-center text-gray-600 font-mono">UPI: sundarpur@sbi</p>
+            <p className="text-center text-gray-600 font-mono">
+              UPI: {upiId || 'Not provided'}
+            </p>
           </div>
 
           <div>
