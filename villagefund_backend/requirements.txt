@@ -5,6 +5,7 @@ django-cors-headers>=4.3
 django-filter>=23.5
 python-decouple>=3.8
 cloudinary>=1.36
+django-cloudinary-storage>=0.3.0
 google-auth>=2.29.0
 requests>=2.31.0
 

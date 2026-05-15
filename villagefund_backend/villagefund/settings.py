@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'django_filters',
+    'cloudinary_storage',
     'cloudinary',
 
     # Local apps
@@ -169,6 +170,14 @@ CORS_ALLOW_CREDENTIALS = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Cloudinary Configuration
+CLOUDINARY_STORAGE = {
+    'CLOUDINARY_URL': config('CLOUDINARY_URL', default='')
+}
+
+if config('CLOUDINARY_URL', default=''):
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Platform Config
 VILLAGE_NAME = "Sundarpur"
