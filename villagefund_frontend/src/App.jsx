@@ -24,6 +24,7 @@ import SSOLogin from './pages/SSOLogin';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import ThankYou from './pages/ThankYou';
+import PaymentStatus from './pages/PaymentStatus';
 import Notifications from './pages/Notifications';
 
 // Admin Pages
@@ -57,6 +58,7 @@ function App() {
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="/thank-you" element={<ProtectedRoute><ThankYou /></ProtectedRoute>} />
+              <Route path="/payment-status" element={<ProtectedRoute><PaymentStatus /></ProtectedRoute>} />
               <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
               
               <Route path="/admin" element={<ProtectedRoute allowedRoles={['SUPER_ADMIN', 'TREASURER']}><AdminDashboard /></ProtectedRoute>} />
