@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { register } from '../api/auth';
 
 export default function Register() {
-  const [formData, setFormData] = useState({ phone_number: '', full_name: '', password: '', password_confirm: '' });
+  const [formData, setFormData] = useState({ phone_number: '', full_name: '', email: '', password: '', password_confirm: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -40,6 +40,16 @@ export default function Register() {
               value={formData.full_name} 
               onChange={handleChange} 
               required 
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-text mb-1">Email Address (Optional)</label>
+            <input 
+              type="email" 
+              name="email" 
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary outline-none"
+              value={formData.email} 
+              onChange={handleChange} 
             />
           </div>
           <div>

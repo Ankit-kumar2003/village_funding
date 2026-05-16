@@ -6,6 +6,8 @@ from .models import Contribution, Pledge
 from .serializers import ContributionSerializer, PledgeSerializer
 from apps.users.permissions import IsTreasurer, IsSuperAdmin
 from rest_framework.permissions import IsAuthenticated
+from apps.notifications.emails import send_contribution_received_email, send_contribution_status_email
+import threading
 
 class ContributionViewSet(viewsets.ModelViewSet):
     queryset = Contribution.objects.all().order_by('-submitted_at')
@@ -22,7 +24,9 @@ class ContributionViewSet(viewsets.ModelViewSet):
         return self.queryset.filter(contributor=user)
 
     def perform_create(self, serializer):
-        serializer.save(contributor=self.request.user)
+        contribution = serializer.save(contributor=self.request.user)
+        # Send confirmation email asynchronously
+        threading.Thread(target=send_contribution_received_email, args=(self.request.user, contribution)).start()
 
     @action(detail=True, methods=['post'], permission_classes=[IsTreasurer])
     def approve(self, request, pk=None):
@@ -35,6 +39,10 @@ class ContributionViewSet(viewsets.ModelViewSet):
             campaign = contribution.campaign
             campaign.raised_amount += contribution.amount
             campaign.save()
+            
+            # Send approval email
+            threading.Thread(target=send_contribution_status_email, args=(contribution.contributor, contribution)).start()
+            
             return Response({'status': 'Approved', 'amount': contribution.amount})
         return Response({'error': 'Cannot approve. Status is not PENDING'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -44,5 +52,9 @@ class ContributionViewSet(viewsets.ModelViewSet):
         if contribution.status == 'PENDING':
             contribution.status = 'REJECTED'
             contribution.save()
+            
+            # Send rejection email
+            threading.Thread(target=send_contribution_status_email, args=(contribution.contributor, contribution)).start()
+            
             return Response({'status': 'Rejected'})
         return Response({'error': 'Cannot reject. Status is not PENDING'}, status=status.HTTP_400_BAD_REQUEST)
