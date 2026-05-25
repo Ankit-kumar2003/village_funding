@@ -28,7 +28,7 @@ Dear {user.full_name},
 
 We have received your contribution request of ₹{contribution.amount} for the campaign "{contribution.campaign.title}".
 
-Your contribution is currently marked as PENDING. Our treasurer will verify the UTR/Reference number ({contribution.reference_number}) shortly.
+Your contribution is currently marked as PENDING. Our team will verify the payment (UTR/Order ID: {contribution.utr_number or contribution.cashfree_order_id or 'N/A'}) shortly.
 You will receive another email once it has been approved.
 
 Thank you for supporting VillageFund!

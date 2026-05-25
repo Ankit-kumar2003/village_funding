@@ -40,7 +40,9 @@ class Contribution(models.Model):
     utr_number = models.CharField(max_length=50, null=True, blank=True) # Making it optional for legacy
     instamojo_payment_request_id = models.CharField(max_length=100, null=True, blank=True)
     instamojo_payment_id = models.CharField(max_length=100, null=True, blank=True)
-    payment_method = models.CharField(max_length=50, default='INSTAMOJO')
+    cashfree_order_id = models.CharField(max_length=100, null=True, blank=True)
+    cashfree_payment_id = models.CharField(max_length=100, null=True, blank=True)
+    payment_method = models.CharField(max_length=50, default='CASHFREE')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
     submitted_at = models.DateTimeField(auto_now_add=True)
     approved_at = models.DateTimeField(null=True, blank=True)

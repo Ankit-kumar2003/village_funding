@@ -15,6 +15,7 @@ urlpatterns = [
     path('api/', include('apps.contributions.urls')),
     path('api/', include('apps.expenses.urls')),
     path('api/', include('apps.gallery.urls')),
+    path('api/', include('apps.contact.urls')),
 ]
 
 if settings.DEBUG:

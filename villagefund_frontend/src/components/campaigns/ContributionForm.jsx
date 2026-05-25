@@ -35,11 +35,18 @@ export default function ContributionForm({ campaignId }) {
         ...formData
       });
       
-      // If the backend returns a payment_url, redirect the user to it
-      if (response.data && response.data.payment_url) {
-        window.location.href = response.data.payment_url;
+      // If the backend returns a payment_session_id, trigger the Cashfree checkout flow
+      if (response.data && response.data.payment_session_id) {
+        const cashfree = window.Cashfree({
+          mode: response.data.cashfree_env || 'sandbox'
+        });
+        
+        cashfree.checkout({
+          paymentSessionId: response.data.payment_session_id,
+          redirectTarget: "_self"
+        });
       } else {
-        setError('Payment link could not be generated.');
+        setError('Payment session could not be initialized.');
         setLoading(false);
       }
     } catch (err) {
