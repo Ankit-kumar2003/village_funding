@@ -16,6 +16,9 @@ urlpatterns = [
     path('api/', include('apps.expenses.urls')),
     path('api/', include('apps.gallery.urls')),
     path('api/', include('apps.contact.urls')),
+    path('api/', include('apps.notifications.urls')),
+    path('api/', include('apps.badges.urls')),
+    path('api/', include('apps.transparency.urls')),
 ]
 
 if settings.DEBUG:
