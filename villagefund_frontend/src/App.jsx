@@ -3,6 +3,7 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { LanguageProvider } from './context/LanguageContext';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 
 // Public Pages
@@ -36,8 +37,9 @@ import ReserveManagement from './pages/admin/ReserveManagement';
 function App() {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <Router>
+      <LanguageProvider>
+        <AuthProvider>
+          <Router>
           <div className="flex flex-col min-h-screen bg-background transition-colors duration-300">
             <Navbar />
           <main className="flex-grow">
@@ -70,7 +72,8 @@ function App() {
           <Footer />
         </div>
       </Router>
-      </AuthProvider>
+        </AuthProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }

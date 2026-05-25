@@ -30,6 +30,7 @@ const LinkedinIcon = ({ className }) => (
   </svg>
 );
 import api from '../api/axios';
+import { useLanguage } from '../context/LanguageContext';
 
 // Animation variants
 const fadeUp = {
@@ -47,6 +48,7 @@ const staggerContainer = {
 };
 
 export default function About() {
+  const { t } = useLanguage();
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
@@ -65,36 +67,32 @@ export default function About() {
     {
       step: '01',
       icon: <Vote className="w-7 h-7" />,
-      title: 'Campaign Proposed',
-      description:
-        'The village committee or Treasurer proposes a new project — temple renovation, road repair, or cultural celebration — with a clear goal and itemized budget.',
+      title: t('step1Title'),
+      description: t('step1Desc'),
       color: 'bg-primary/10 text-primary',
       border: 'border-primary/20',
     },
     {
       step: '02',
       icon: <Banknote className="w-7 h-7" />,
-      title: 'Community Funds It',
-      description:
-        'Contributors pay securely through Cashfree — no handing cash to individuals. Every payment is auto-verified and instantly recorded on the public ledger.',
+      title: t('step2Title'),
+      description: t('step2Desc'),
       color: 'bg-secondary/10 text-secondary',
       border: 'border-secondary/20',
     },
     {
       step: '03',
       icon: <Receipt className="w-7 h-7" />,
-      title: 'Every Expense Receipted',
-      description:
-        'The Treasurer posts every expense with a digital receipt photo. Expenses above ₹2,000 require multi-signature approval from committee members.',
+      title: t('step3Title'),
+      description: t('step3Desc'),
       color: 'bg-blue-500/10 text-blue-500',
       border: 'border-blue-500/20',
     },
     {
       step: '04',
       icon: <Eye className="w-7 h-7" />,
-      title: 'Public Accountability',
-      description:
-        'Anyone in the village — or the world — can view the full ledger, expense receipts, audit log, and financial health score. Zero hidden transactions.',
+      title: t('step4Title'),
+      description: t('step4Desc'),
       color: 'bg-purple-500/10 text-purple-500',
       border: 'border-purple-500/20',
     },
@@ -141,7 +139,7 @@ export default function About() {
           >
             <motion.div variants={fadeUp} className="inline-flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-sm font-medium">
               <MapPin className="w-4 h-4" />
-              <span>Mahuaa · West Champaran · Bihar · PIN 845106</span>
+              <span>{t('aboutHeroBadge')}</span>
             </motion.div>
 
             <motion.h1
@@ -149,7 +147,7 @@ export default function About() {
               custom={1}
               className="text-4xl sm:text-5xl md:text-6xl font-extrabold font-heading tracking-tight leading-tight"
             >
-              About <span className="text-green-300">VillageFund</span>
+              {t('aboutHeroTitle')} <span className="text-green-300">VillageFund</span>
             </motion.h1>
 
             <motion.p
@@ -157,10 +155,7 @@ export default function About() {
               custom={2}
               className="text-lg md:text-xl text-orange-100 leading-relaxed max-w-3xl mx-auto"
             >
-              Mahuaa is a vibrant, tight-knit village community in West Champaran, Bihar, that regularly comes together
-              to improve school facilities, install street lights, and build infrastructure.
-              VillageFund was born to make sure every single rupee contributed is
-              publicly accounted for — rebuilding the trust that manual collection eroded.
+              {t('aboutHeroDesc')}
             </motion.p>
           </motion.div>
         </div>
@@ -184,13 +179,13 @@ export default function About() {
             {/* Coordinates Detail Card */}
             <div className="lg:col-span-5 space-y-6">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-orange-100 text-orange-700 border border-orange-200 uppercase tracking-wider">
-                📍 Village Basecamp
+                📍 {t('geoBadge')}
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[#1C1C1C] leading-tight">
-                Our Geographic Coordinates in <span className="text-primary">Mahuaa</span>
+                {t('geoTitle')} <span className="text-primary">Mahuaa</span>
               </h2>
               <p className="text-gray-600 leading-relaxed font-semibold text-sm">
-                Mahuaa is nestled in the West Champaran district of Bihar. In order to drive complete geographic transparency, our fundraising platform maps development campaigns directly to the physical locations where they are implemented.
+                {t('geoDesc')}
               </p>
               <div className="p-5 bg-background border border-gray-200 rounded-3xl flex items-center gap-4 shadow-sm">
                 <div className="p-4 bg-primary/10 text-primary rounded-2xl font-black font-mono text-center text-xs tracking-wider border border-primary/20">
@@ -199,9 +194,9 @@ export default function About() {
                   84°11'01.7"E
                 </div>
                 <div>
-                  <p className="text-[10px] text-gray-400 uppercase font-black tracking-wider">Registered Basecamp</p>
+                  <p className="text-[10px] text-gray-400 uppercase font-black tracking-wider">{t('geoRegistered')}</p>
                   <p className="font-extrabold text-gray-800 text-sm mt-0.5">Mahuaa, PIN 845106</p>
-                  <p className="text-xs text-gray-500 font-semibold mt-0.5">West Champaran, Bihar, India</p>
+                  <p className="text-xs text-gray-500 font-semibold mt-0.5">{t('geoState')}</p>
                 </div>
               </div>
             </div>
@@ -240,35 +235,29 @@ export default function About() {
             {/* Left — Story */}
             <div className="space-y-6">
               <motion.span variants={fadeUp} className="inline-block text-sm font-semibold tracking-wider uppercase text-primary bg-primary/10 px-3 py-1 rounded-full">
-                The Problem
+                {t('problemBadge')}
               </motion.span>
               <motion.h2
                 variants={fadeUp}
                 custom={1}
                 className="text-3xl md:text-4xl font-bold font-heading text-text leading-snug"
               >
-                Money went into one person's account —{' '}
-                <span className="text-primary">no records, no trust.</span>
+                {t('problemTitle')}{' '}
+                <span className="text-primary">{t('problemHighlight')}</span>
               </motion.h2>
               <motion.p
                 variants={fadeUp}
                 custom={2}
                 className="text-text-muted text-lg leading-relaxed"
               >
-                For years, village youth collected contributions for pujas, cultural
-                events, and infrastructure work into a single person's personal bank
-                account. There were no receipts, no public ledger, and zero
-                accountability. People had no idea how much was collected, what was
-                spent, or where the rest went. Trust declined. Contributions dried up.
+                {t('problemDesc')}
               </motion.p>
               <motion.p
                 variants={fadeUp}
                 custom={3}
                 className="text-text-muted text-lg leading-relaxed"
               >
-                VillageFund was created to permanently fix this — by making every
-                rupee traceable, every expense provable, and every decision transparent
-                to the entire community.
+                {t('solutionDesc')}
               </motion.p>
             </div>
 
