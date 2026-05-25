@@ -171,8 +171,8 @@ export default function Contact() {
                     <div>
                       <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-200">Village Address</h3>
                       <p className="text-gray-600 dark:text-gray-400 mt-1">
-                        Panchayat Bhavan, Sundarpur<br />
-                        Yamunanagar District, Haryana — 133203
+                        Panchayat Bhavan, Mahuaa<br />
+                        West Champaran District, Bihar — 845106
                       </p>
                     </div>
                   </div>

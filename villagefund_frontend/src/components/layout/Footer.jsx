@@ -5,7 +5,7 @@ export default function Footer() {
         <div>
           <h3 className="text-xl font-heading font-bold text-primary mb-4">VillageFund</h3>
           <p className="text-sm text-gray-400">
-            Transparent community fundraising for Sundarpur, District Ambala, Haryana. Every rupee tracked.
+            Transparent community fundraising for Mahuaa, West Champaran, Bihar. Every rupee tracked.
           </p>
         </div>
         <div>

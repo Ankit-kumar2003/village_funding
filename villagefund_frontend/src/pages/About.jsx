@@ -141,7 +141,7 @@ export default function About() {
           >
             <motion.div variants={fadeUp} className="inline-flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-sm font-medium">
               <MapPin className="w-4 h-4" />
-              <span>Sundarpur · Yamunanagar · Haryana</span>
+              <span>Mahuaa · West Champaran · Bihar · PIN 845106</span>
             </motion.div>
 
             <motion.h1
@@ -157,8 +157,8 @@ export default function About() {
               custom={2}
               className="text-lg md:text-xl text-orange-100 leading-relaxed max-w-3xl mx-auto"
             >
-              Sundarpur is a tight-knit village community that regularly comes together
-              to build temples, celebrate festivals, and improve local infrastructure.
+              Mahuaa is a vibrant, tight-knit village community in West Champaran, Bihar, that regularly comes together
+              to improve school facilities, install street lights, and build infrastructure.
               VillageFund was born to make sure every single rupee contributed is
               publicly accounted for — rebuilding the trust that manual collection eroded.
             </motion.p>
@@ -173,6 +173,57 @@ export default function About() {
               className="fill-background transition-colors duration-300"
             />
           </svg>
+        </div>
+      </section>
+
+      {/* ───────────── Section 1.5: Village Geography & Satellite Tracker ───────────── */}
+      <section className="py-20 bg-surface border-b border-gray-200/60">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Coordinates Detail Card */}
+            <div className="lg:col-span-5 space-y-6">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-orange-100 text-orange-700 border border-orange-200 uppercase tracking-wider">
+                📍 Village Basecamp
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold font-heading text-[#1C1C1C] leading-tight">
+                Our Geographic Coordinates in <span className="text-primary">Mahuaa</span>
+              </h2>
+              <p className="text-gray-600 leading-relaxed font-semibold text-sm">
+                Mahuaa is nestled in the West Champaran district of Bihar. In order to drive complete geographic transparency, our fundraising platform maps development campaigns directly to the physical locations where they are implemented.
+              </p>
+              <div className="p-5 bg-background border border-gray-200 rounded-3xl flex items-center gap-4 shadow-sm">
+                <div className="p-4 bg-primary/10 text-primary rounded-2xl font-black font-mono text-center text-xs tracking-wider border border-primary/20">
+                  27°11'21.6"N
+                  <br />
+                  84°11'01.7"E
+                </div>
+                <div>
+                  <p className="text-[10px] text-gray-400 uppercase font-black tracking-wider">Registered Basecamp</p>
+                  <p className="font-extrabold text-gray-800 text-sm mt-0.5">Mahuaa, PIN 845106</p>
+                  <p className="text-xs text-gray-500 font-semibold mt-0.5">West Champaran, Bihar, India</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Embedded Live Map Card */}
+            <div className="lg:col-span-7 bg-white p-4 rounded-3xl border border-gray-200 shadow-xl relative overflow-hidden h-[420px]">
+              <div className="absolute inset-0 bg-gray-50/50 flex items-center justify-center -z-10">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent"></div>
+              </div>
+              <iframe
+                title="Mahuaa Village Basecamp Satellite View"
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                style={{ border: 0, borderRadius: '1.25rem' }}
+                src="https://maps.google.com/maps?q=27.189333,84.183806&t=k&z=17&ie=UTF8&iwloc=&output=embed"
+                allowFullScreen
+                loading="lazy"
+              ></iframe>
+            </div>
+
+          </div>
         </div>
       </section>
 

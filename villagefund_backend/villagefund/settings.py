@@ -189,6 +189,6 @@ if config('CLOUDINARY_URL', default=''):
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Platform Config
-VILLAGE_NAME = "Sundarpur"
+VILLAGE_NAME = "Mahuaa"
 MULTI_SIG_THRESHOLD = 2000
 MULTI_SIG_REQUIRED_APPROVALS = 2

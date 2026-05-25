@@ -20,7 +20,7 @@ def seed():
     
     if Campaign.objects.count() == 0:
         c1 = Campaign.objects.create(
-            title='Sundarpur Primary School Roof Repair', 
+            title='Mahuaa Primary School Roof Repair', 
             description='The primary school roof has been leaking during the monsoon. We need to replace the tin sheets and reinforce the wooden beams before the next rainy season to ensure the children can study safely.', 
             category='EDUCATION', 
             goal_amount=50000, 

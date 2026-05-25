@@ -33,7 +33,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-24 md:py-32 relative z-10">
           <div className="max-w-3xl mx-auto text-center space-y-8">
             <h1 className="text-5xl md:text-6xl font-extrabold font-heading tracking-tight leading-tight">
-              Empowering Sundarpur, <span className="text-secondary-light block mt-2 text-green-300">Together.</span>
+              Empowering Mahuaa, <span className="text-secondary-light block mt-2 text-green-300">Together.</span>
             </h1>
             <p className="text-lg md:text-xl text-orange-100 leading-relaxed max-w-2xl mx-auto">
               100% transparent, community-driven funding for our village's development. 
@@ -180,7 +180,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold font-heading mb-6">Ready to make an impact?</h2>
           <p className="text-xl text-green-100 mb-10 max-w-2xl mx-auto">
-            Join the community of NRIs and locals working together to build a better future for Sundarpur.
+            Join the community of NRIs and locals working together to build a better future for Mahuaa.
           </p>
           <Link 
             to="/register" 
