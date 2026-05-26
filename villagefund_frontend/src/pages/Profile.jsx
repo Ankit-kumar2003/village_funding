@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { getUserContributions } from '../api/contributions';
 import { getUserBadges, getAllBadges } from '../api/badges';
 import IndianCurrency from '../components/common/IndianCurrency';
@@ -24,6 +25,7 @@ import {
 
 export default function Profile() {
   const { user } = useContext(AuthContext);
+  const { t } = useLanguage();
   const [contributions, setContributions] = useState([]);
   const [userBadges, setUserBadges] = useState([]);
   const [allBadges, setAllBadges] = useState([]);
@@ -89,12 +91,12 @@ export default function Profile() {
                   </span>
                   {user?.is_nri && (
                     <span className="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded border border-blue-400">
-                      NRI SUPPORTER 🌐
+                      {t('profileNriTag')}
                     </span>
                   )}
                 </div>
                 <p className="text-orange-50/90 font-medium text-sm mt-1 flex flex-wrap items-center justify-center sm:justify-start gap-3">
-                  <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {user?.village_name || 'Sundarpur'}</span>
+                  <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {user?.village_name || 'Mahuaa'}</span>
                   {user?.email && <span className="flex items-center gap-1"><Mail className="w-3.5 h-3.5" /> {user.email}</span>}
                   {user?.phone_number && <span className="flex items-center gap-1"><Phone className="w-3.5 h-3.5" /> {user.phone_number}</span>}
                 </p>
@@ -103,12 +105,12 @@ export default function Profile() {
 
             <div className="bg-white/10 backdrop-blur-md border border-white/20 p-5 rounded-2xl flex gap-6 text-center shadow-lg">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-wider text-orange-100">Contribution Rank</p>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-orange-100">{t('profileContribRank')}</p>
                 <p className="text-3xl font-black font-heading mt-1 text-yellow-300">#4</p>
               </div>
               <div className="w-px bg-white/20"></div>
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-wider text-orange-100">Badges Won</p>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-orange-100">{t('profileBadgesWon')}</p>
                 <p className="text-3xl font-black font-heading mt-1 text-white">{userBadges.length}</p>
               </div>
             </div>
@@ -118,10 +120,10 @@ export default function Profile() {
         {/* Stats Summary Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           {[
-            { label: 'Total Invested', val: <IndianCurrency amount={totalContributed} />, icon: <IndianRupee className="w-6 h-6" />, color: 'text-green-600 bg-green-50 border-green-100' },
-            { label: 'Projects Backed', val: campaignsCount, icon: <Heart className="w-6 h-6" />, color: 'text-rose-600 bg-rose-50 border-rose-100' },
-            { label: 'Active Streak', val: `${currentStreak} Campaign`, icon: <TrendingUp className="w-6 h-6" />, color: 'text-orange-600 bg-orange-50 border-orange-100' },
-            { label: 'Longest Streak', val: `${longestStreak} Campaign`, icon: <Activity className="w-6 h-6" />, color: 'text-amber-600 bg-amber-50 border-amber-100' }
+            { label: t('profileTotalInvested'), val: <IndianCurrency amount={totalContributed} />, icon: <IndianRupee className="w-6 h-6" />, color: 'text-green-600 bg-green-50 border-green-100' },
+            { label: t('profileProjectsBacked'), val: campaignsCount, icon: <Heart className="w-6 h-6" />, color: 'text-rose-600 bg-rose-50 border-rose-100' },
+            { label: t('profileActiveStreak'), val: `${currentStreak} ${t('profileCampaignUnit')}`, icon: <TrendingUp className="w-6 h-6" />, color: 'text-orange-600 bg-orange-50 border-orange-100' },
+            { label: t('profileLongestStreak'), val: `${longestStreak} ${t('profileCampaignUnit')}`, icon: <Activity className="w-6 h-6" />, color: 'text-amber-600 bg-amber-50 border-amber-100' }
           ].map((stat, i) => (
             <motion.div
               initial={{ opacity: 0, y: 15 }}
@@ -144,9 +146,9 @@ export default function Profile() {
         {/* Dynamic Section Navigation Tabs */}
         <div className="flex border-b border-gray-200 mb-8">
           {[
-            { id: 'contributions', label: 'My Contributions', icon: <History className="w-4 h-4" /> },
-            { id: 'badges', label: 'Badges & Achievements', icon: <Award className="w-4 h-4" /> },
-            { id: 'pledges', label: 'Pledge Tracker', icon: <Calendar className="w-4 h-4" /> }
+            { id: 'contributions', label: t('profileTabContributions'), icon: <History className="w-4 h-4" /> },
+            { id: 'badges', label: t('profileTabBadges'), icon: <Award className="w-4 h-4" /> },
+            { id: 'pledges', label: t('profileTabPledges'), icon: <Calendar className="w-4 h-4" /> }
           ].map(tab => (
             <button
               key={tab.id}
@@ -165,7 +167,7 @@ export default function Profile() {
 
         {/* Tab Contents */}
         {loading ? (
-          <div className="py-20 text-center text-gray-500 font-medium">Loading profile items...</div>
+          <div className="py-20 text-center text-gray-500 font-medium">{t('profileLoadingItems')}</div>
         ) : (
           <motion.div
             key={activeTab}
@@ -177,26 +179,26 @@ export default function Profile() {
             {activeTab === 'contributions' && (
               <div className="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="px-8 py-5 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
-                  <h3 className="text-lg font-black text-gray-800 font-heading">Contributions Log</h3>
+                  <h3 className="text-lg font-black text-gray-800 font-heading">{t('profileContribLog')}</h3>
                   <button className="text-xs font-bold text-orange-600 hover:underline">
-                    Download Summary PDF
+                    {t('profileDownloadPdf')}
                   </button>
                 </div>
 
                 {contributions.length === 0 ? (
                   <div className="py-16 text-center text-gray-500">
-                    <p className="mb-4">No contributions found on this account.</p>
+                    <p className="mb-4">{t('profileNoContrib')}</p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
                         <tr className="bg-gray-50 text-gray-500 text-[10px] font-black uppercase tracking-wider border-b border-gray-100">
-                          <th className="p-5">Submitted Date</th>
-                          <th className="p-5">Campaign ID</th>
-                          <th className="p-5">Amount</th>
-                          <th className="p-5">Transaction Reference (UTR)</th>
-                          <th className="p-5">Status</th>
+                          <th className="p-5">{t('profileColDate')}</th>
+                          <th className="p-5">{t('profileColCampaignId')}</th>
+                          <th className="p-5">{t('profileColAmount')}</th>
+                          <th className="p-5">{t('profileColUtr')}</th>
+                          <th className="p-5">{t('profileColStatus')}</th>
                         </tr>
                       </thead>
                       <tbody className="text-sm text-gray-700 font-medium">
@@ -244,14 +246,14 @@ export default function Profile() {
             {activeTab === 'badges' && (
               <div>
                 <div className="mb-6">
-                  <h3 className="text-xl font-extrabold text-gray-800 font-heading">Gamification Showcase</h3>
-                  <p className="text-gray-500 text-sm mt-1">Unlock badges by supporting village initiatives and completing consecutive contribution streaks.</p>
+                  <h3 className="text-xl font-extrabold text-gray-800 font-heading">{t('profileBadgesTitle')}</h3>
+                  <p className="text-gray-500 text-sm mt-1">{t('profileBadgesDesc')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {/* Map all badges and highlight the earned ones */}
                   {allBadges.length === 0 ? (
-                    <div className="col-span-full py-16 text-center text-gray-500">No badge configurations found on the backend.</div>
+                    <div className="col-span-full py-16 text-center text-gray-500">{t('profileNoBadges')}</div>
                   ) : (
                     allBadges.map((badge) => {
                       const earned = userBadges.some((ub) => ub.badge === badge.id);
@@ -272,7 +274,7 @@ export default function Profile() {
                               <h4 className="font-extrabold font-heading text-gray-800">{badge.name}</h4>
                               {earned && (
                                 <span className="bg-amber-500 text-white text-[9px] font-black uppercase px-1.5 py-0.5 rounded">
-                                  Earned
+                                  {t('profileBadgeEarned')}
                                 </span>
                               )}
                             </div>
@@ -302,38 +304,37 @@ export default function Profile() {
                   <div className="w-20 h-20 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto">
                     <Calendar className="w-10 h-10" />
                   </div>
-                  <h4 className="text-2xl font-black font-heading text-gray-800">Monthly Contribution Pledges</h4>
+                  <h4 className="text-2xl font-black font-heading text-gray-800">{t('profilePledgesTitle')}</h4>
                   <p className="text-gray-500 leading-relaxed max-w-lg mx-auto">
-                    Commit to supporting village infrastructure and welfare projects by setting up monthly installment pledges.
-                    Perfect for NRIs who wish to consistently support their homeland.
+                    {t('profilePledgesDesc')}
                   </p>
 
                   <div className="p-6 bg-gray-50 rounded-2xl border border-gray-200 max-w-md mx-auto text-left space-y-4">
                     <div className="flex justify-between items-center font-bold">
-                      <span className="text-gray-500 text-sm">Active Pledge</span>
-                      <span className="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">Active</span>
+                      <span className="text-gray-500 text-sm">{t('profileActivePledge')}</span>
+                      <span className="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">{t('profileActive')}</span>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-400 uppercase font-bold tracking-wider">Campaign Target</p>
-                      <p className="font-extrabold text-gray-800 text-base mt-0.5">Sundarpur Smart School Infrastructure</p>
+                      <p className="text-xs text-gray-400 uppercase font-bold tracking-wider">{t('profileCampaignTarget')}</p>
+                      <p className="font-extrabold text-gray-800 text-base mt-0.5">Mahuaa Smart School Infrastructure</p>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-xs text-gray-400 uppercase font-bold tracking-wider">Installment</p>
+                        <p className="text-xs text-gray-400 uppercase font-bold tracking-wider">{t('profileInstallment')}</p>
                         <p className="font-extrabold text-gray-800 text-base mt-0.5">₹2,000 / month</p>
                       </div>
                       <div>
-                        <p className="text-xs text-gray-400 uppercase font-bold tracking-wider">Next Due Date</p>
+                        <p className="text-xs text-gray-400 uppercase font-bold tracking-wider">{t('profileNextDueDate')}</p>
                         <p className="font-extrabold text-orange-600 text-base mt-0.5">05 Jun 2026</p>
                       </div>
                     </div>
 
                     <div className="pt-2 flex gap-3">
                       <button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 rounded-xl text-xs transition-colors">
-                        Pay Installment
+                        {t('profilePayInstallment')}
                       </button>
                       <button className="flex-1 bg-white hover:bg-red-50 text-red-600 border border-red-200 font-bold py-2 rounded-xl text-xs transition-colors">
-                        Cancel Pledge
+                        {t('profileCancelPledge')}
                       </button>
                     </div>
                   </div>

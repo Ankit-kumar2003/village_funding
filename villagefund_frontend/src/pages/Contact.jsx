@@ -17,8 +17,10 @@ import {
   UserCheck 
 } from 'lucide-react';
 import api from '../api/axios';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Contact() {
+  const { t } = useLanguage();
   // Form State
   const [formData, setFormData] = useState({
     name: '',
@@ -35,52 +37,52 @@ export default function Contact() {
   const [openFaq, setOpenFaq] = useState(null);
 
   const categories = [
-    { value: 'GENERAL', label: 'General Query' },
-    { value: 'ISSUE', label: 'Report Issue' },
-    { value: 'SUGGEST_CAMPAIGN', label: 'Suggest Campaign' },
-    { value: 'TECHNICAL', label: 'Technical Problem' }
+    { value: 'GENERAL', label: t('contactCatGeneral') },
+    { value: 'ISSUE', label: t('contactCatIssue') },
+    { value: 'SUGGEST_CAMPAIGN', label: t('contactCatSuggest') },
+    { value: 'TECHNICAL', label: t('contactCatTechnical') }
   ];
 
   const faqs = [
     {
       icon: <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />,
-      question: "How do I know my money reached the right place?",
-      answer: "Every single transaction on VillageFund is logged publicly. When you contribute, your money goes directly into the designated campaign account, and the transaction status can be tracked in real-time. All expenses must be submitted by the Treasurer with digital receipts, which you can view at any time under the 'Transparency' tab or the campaign page."
+      question: t('faq1Q'),
+      answer: t('faq1A')
     },
     {
       icon: <Globe className="w-5 h-5 text-blue-500" />,
-      question: "Can I contribute if I live outside the village (NRI)?",
-      answer: "Yes, absolutely! NRIs and community members living outside the village are welcome to support development works. If you are an NRI contributor, you can request a GUEST_CONTRIBUTOR upgrade from the Super Admin to submit online payments securely through our Cashfree payment gateway."
+      question: t('faq2Q'),
+      answer: t('faq2A')
     },
     {
       icon: <Clock className="w-5 h-5 text-amber-500" />,
-      question: "How long does contribution approval take?",
-      answer: "Since we've integrated the automated Cashfree payment gateway, payment verifications occur in real-time. Once the transaction completes, your contribution status will change to APPROVED almost instantly. Manual or pending checkouts are auto-polled and resolved within a few minutes."
+      question: t('faq3Q'),
+      answer: t('faq3A')
     },
     {
       icon: <UserCheck className="w-5 h-5 text-purple-500" />,
-      question: "Who can create a campaign?",
-      answer: "Campaigns can only be created by designated Treasurers or Super Admins after the village committee approves the development work or cultural event. However, any Contributor can use our contact form to suggest new campaigns!"
+      question: t('faq4Q'),
+      answer: t('faq4A')
     },
     {
       icon: <DollarSign className="w-5 h-5 text-emerald-500" />,
-      question: "What if a campaign doesn't reach its goal?",
-      answer: "If a campaign fails to reach its funding target by the deadline, the village committee meets to decide whether to extend the duration, proceed with a scaled-down version of the project, or refund the contributions to the Village Reserve Fund for future development."
+      question: t('faq5Q'),
+      answer: t('faq5A')
     },
     {
       icon: <UserCheck className="w-5 h-5 text-orange-500" />,
-      question: "How do I become a Treasurer?",
-      answer: "Treasurers are nominated and approved by the village Panchayat or organizing committee. Once nominated, the Super Admin will upgrade your platform account role, granting you permissions to initialize campaigns, manage budgets, and post expenses."
+      question: t('faq6Q'),
+      answer: t('faq6A')
     },
     {
       icon: <Globe className="w-5 h-5 text-indigo-500" />,
-      question: "Is my contribution data visible to everyone?",
-      answer: "To ensure complete transparency, contributor names, amounts, and dates are public. However, sensitive billing details, full phone numbers, and transaction IDs are securely masked to maintain privacy and security."
+      question: t('faq7Q'),
+      answer: t('faq7A')
     },
     {
       icon: <ShieldAlert className="w-5 h-5 text-rose-500" />,
-      question: "How do I report a suspicious expense?",
-      answer: "If you notice an expense listed without a valid receipt photo or suspect it is inflated, you can click the 'Flag' icon on that specific expense card from the campaign or transparency page. This raises an alert that is immediately investigated by the Super Admin."
+      question: t('faq8Q'),
+      answer: t('faq8A')
     }
   ];
 
@@ -132,13 +134,13 @@ export default function Contact() {
             transition={{ duration: 0.5 }}
           >
             <span className="text-primary font-heading font-semibold tracking-wider uppercase text-sm px-3 py-1 bg-orange-50 dark:bg-orange-950/40 rounded-full text-[#FF6B00]">
-              Get In Touch
+              {t('contactGetInTouch')}
             </span>
             <h1 className="mt-4 text-4xl sm:text-5xl font-bold font-heading text-[#1C1C1C] dark:text-white tracking-tight">
-              Community Contact Center
+              {t('contactTitle')}
             </h1>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-400">
-              Have questions about contributions, need help with campaign creation, or want to suggest village improvements? We are here to help.
+              {t('contactSubtitle')}
             </p>
           </motion.div>
         </div>
@@ -156,10 +158,10 @@ export default function Contact() {
             >
               <div>
                 <h2 className="text-2xl font-bold font-heading text-[#1C1C1C] dark:text-white mb-6">
-                  Direct Connections
+                  {t('contactDirectTitle')}
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
-                  Feel free to contact the organizing committee, reach out to active Treasurers, or visit our office at the Panchayat Bhavan.
+                  {t('contactDirectSubtitle')}
                 </p>
 
                 <div className="space-y-6">
@@ -169,10 +171,9 @@ export default function Contact() {
                       <MapPin className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-200">Village Address</h3>
+                      <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-200">{t('contactAddressTitle')}</h3>
                       <p className="text-gray-600 dark:text-gray-400 mt-1">
-                        Panchayat Bhavan, Mahuaa<br />
-                        West Champaran District, Bihar — 845106
+                        {t('contactAddressText')}
                       </p>
                     </div>
                   </div>
@@ -183,7 +184,7 @@ export default function Contact() {
                       <Mail className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-200">Email Support</h3>
+                      <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-200">{t('contactEmailTitle')}</h3>
                       <a href="mailto:support@villagefund.org" className="text-primary hover:underline font-medium text-[#FF6B00] mt-1 inline-block">
                         support@villagefund.org
                       </a>
@@ -196,9 +197,9 @@ export default function Contact() {
                       <MessageSquare className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-200">Active Treasurer (WhatsApp)</h3>
+                      <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-200">{t('contactWhatsAppTitle')}</h3>
                       <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm">
-                        Instantly connect with our active treasurer on WhatsApp for swift payment doubts.
+                        {t('contactWhatsAppText')}
                       </p>
                       <a 
                         href="https://wa.me/919999999999?text=Hello%20Treasurer,%20I%20have%20a%20query%20regarding%20my%20VillageFund%20contribution." 
@@ -207,7 +208,7 @@ export default function Contact() {
                         className="mt-3 inline-flex items-center space-x-2 px-4 py-2 bg-[#1A6B3C] text-white rounded-xl text-sm font-bold shadow-md shadow-green-900/10 hover:bg-opacity-95 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
                       >
                         <MessageSquare className="w-4 h-4" />
-                        <span>Chat on WhatsApp</span>
+                        <span>{t('contactWhatsAppBtn')}</span>
                       </a>
                     </div>
                   </div>
@@ -216,7 +217,7 @@ export default function Contact() {
 
               {/* Designer / MM Engineering College Tag */}
               <div className="mt-12 pt-6 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400">
-                Developed for the community by the MM Engineering College B.Tech CSE Team.
+                {t('contactDevTag')}
               </div>
             </motion.div>
           </div>
@@ -243,16 +244,16 @@ export default function Contact() {
                       <CheckCircle className="w-10 h-10" />
                     </div>
                     <h3 className="text-3xl font-bold font-heading text-[#1C1C1C] dark:text-white mb-4">
-                      Message Submitted!
+                      {t('contactSuccessTitle')}
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto mb-8 leading-relaxed">
-                      Thank you for contacting us. Your message has been safely received, and our Panchayat admins will look into it shortly.
+                      {t('contactSuccessDesc')}
                     </p>
                     <button
                       onClick={() => setSuccess(false)}
                       className="px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-opacity-95 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 shadow-md shadow-orange-500/20 bg-[#FF6B00]"
                     >
-                      Send Another Message
+                      {t('contactSuccessBtn')}
                     </button>
                   </motion.div>
                 ) : (
@@ -266,10 +267,10 @@ export default function Contact() {
                   >
                     <div className="border-b border-gray-100 dark:border-gray-700 pb-4">
                       <h2 className="text-2xl font-bold font-heading text-[#1C1C1C] dark:text-white">
-                        Send a Message
+                        {t('contactFormTitle')}
                       </h2>
                       <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                        Fields marked with <span className="text-red-500">*</span> are mandatory.
+                        {t('contactFormFieldsHelp')}
                       </p>
                     </div>
 
@@ -284,7 +285,7 @@ export default function Contact() {
                       {/* Name input */}
                       <div>
                         <label htmlFor="name" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                          Full Name <span className="text-red-500">*</span>
+                          {t('contactFormName')} <span className="text-red-500">*</span>
                         </label>
                         <input
                           type="text"
@@ -301,7 +302,7 @@ export default function Contact() {
                       {/* Phone Input */}
                       <div>
                         <label htmlFor="phone_number" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                          Phone Number <span className="text-red-500">*</span>
+                          {t('contactFormPhone')} <span className="text-red-500">*</span>
                         </label>
                         <input
                           type="tel"
@@ -320,7 +321,7 @@ export default function Contact() {
                       {/* Email Input */}
                       <div>
                         <label htmlFor="email" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                          Email Address <span className="text-gray-400">(Optional)</span>
+                          {t('contactFormEmail')} <span className="text-gray-400">{t('contactFormEmailOptional')}</span>
                         </label>
                         <input
                           type="email"
@@ -336,7 +337,7 @@ export default function Contact() {
                       {/* Category Dropdown */}
                       <div>
                         <label htmlFor="category" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                          Reason for Inquiry <span className="text-red-500">*</span>
+                          {t('contactFormReason')} <span className="text-red-500">*</span>
                         </label>
                         <select
                           id="category"
@@ -355,7 +356,7 @@ export default function Contact() {
                     {/* Message Area */}
                     <div>
                       <label htmlFor="message" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Message <span className="text-red-500">*</span>
+                        {t('contactFormMsg')} <span className="text-red-500">*</span>
                       </label>
                       <textarea
                         id="message"
@@ -364,7 +365,7 @@ export default function Contact() {
                         value={formData.message}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-[#FAFAF7] dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#FF6B00] transition duration-200 resize-none"
-                        placeholder="Write your query or campaign suggestion here..."
+                        placeholder={t('contactFormMsgPlaceholder')}
                         required
                       ></textarea>
                     </div>
@@ -380,7 +381,7 @@ export default function Contact() {
                       ) : (
                         <>
                           <Send className="w-5 h-5" />
-                          <span>Submit Message</span>
+                          <span>{t('contactFormBtn')}</span>
                         </>
                       )}
                     </button>
@@ -398,10 +399,10 @@ export default function Contact() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold font-heading text-[#1C1C1C] dark:text-white flex items-center justify-center space-x-3">
               <HelpCircle className="w-8 h-8 text-[#FF6B00]" />
-              <span>Frequently Asked Questions</span>
+              <span>{t('contactFaqTitle')}</span>
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mt-3 max-w-xl mx-auto">
-              Quick answers regarding safety, payments, transparent receipts, NRI status, and roles.
+              {t('contactFaqSubtitle')}
             </p>
           </div>
 

@@ -129,7 +129,7 @@ export default function UserManagement() {
                           <div>
                             <p className="font-extrabold text-gray-800">{member.full_name}</p>
                             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">
-                              {member.village_name || 'Sundarpur'}
+                              {member.village_name || 'Mahuaa'}
                             </p>
                           </div>
                         </div>

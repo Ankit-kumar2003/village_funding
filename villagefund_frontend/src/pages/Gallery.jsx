@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
 import { getGallery } from '../api/gallery';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Gallery() {
+  const { t } = useLanguage();
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('ALL');
 
   const categories = [
-    { label: 'All Photos', value: 'ALL' },
-    { label: 'Before', value: 'BEFORE' },
-    { label: 'During', value: 'DURING' },
-    { label: 'After', value: 'AFTER' },
-    { label: 'Events', value: 'EVENT' }
+    { label: t('galleryFilterAll'), value: 'ALL' },
+    { label: t('galleryFilterBefore'), value: 'BEFORE' },
+    { label: t('galleryFilterDuring'), value: 'DURING' },
+    { label: t('galleryFilterAfter'), value: 'AFTER' },
+    { label: t('galleryFilterEvents'), value: 'EVENT' }
   ];
 
   useEffect(() => {
@@ -55,8 +57,8 @@ export default function Gallery() {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-extrabold font-heading text-text mb-4 dark:text-white">Village Progress Gallery</h1>
-        <p className="text-text-muted text-lg">Witness the transformation of Sundarpur through the eyes of our community.</p>
+        <h1 className="text-4xl font-extrabold font-heading text-text mb-4 dark:text-white">{t('galleryTitle')}</h1>
+        <p className="text-text-muted text-lg">{t('gallerySubtitle')}</p>
       </div>
 
       {/* Filter Categories */}
@@ -82,7 +84,7 @@ export default function Gallery() {
         </div>
       ) : filteredPhotos.length === 0 ? (
         <div className="text-center py-20 bg-surface rounded-2xl border border-border">
-          <p className="text-text-muted text-xl">No photos found in this category yet. Proof of progress will be uploaded here as projects move forward!</p>
+          <p className="text-text-muted text-xl">{t('galleryEmpty')}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -109,7 +111,7 @@ export default function Gallery() {
               </div>
               <div className="p-4">
                 <p className="text-sm font-bold text-text mb-1 line-clamp-1">{item.caption}</p>
-                <p className="text-xs text-text-muted">{item.campaign_title || 'General Development'}</p>
+                <p className="text-xs text-text-muted">{item.campaign_title || t('galleryGeneral')}</p>
               </div>
             </div>
           ))}

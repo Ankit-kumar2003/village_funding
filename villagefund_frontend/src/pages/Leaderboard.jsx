@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getLeaderboard } from '../api/auth';
 import IndianCurrency from '../components/common/IndianCurrency';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Leaderboard() {
+  const { t } = useLanguage();
   const [data, setData] = useState({ top_contributors: [], top_streaks: [] });
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('contributors');
@@ -25,8 +27,8 @@ export default function Leaderboard() {
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-extrabold font-heading text-text mb-4 dark:text-white">Village Honor Roll</h1>
-        <p className="text-text-muted text-lg">Recognizing the community heroes driving Sundarpur's growth.</p>
+        <h1 className="text-4xl font-extrabold font-heading text-text mb-4 dark:text-white">{t('leaderboardTitle')}</h1>
+        <p className="text-text-muted text-lg">{t('leaderboardSubtitle')}</p>
       </div>
 
       {/* Tabs */}
@@ -40,7 +42,7 @@ export default function Leaderboard() {
                 : 'text-text-muted hover:text-text'
             }`}
           >
-            Top Contributors
+            {t('tabContributors')}
           </button>
           <button
             onClick={() => setActiveTab('streaks')}
@@ -50,7 +52,7 @@ export default function Leaderboard() {
                 : 'text-text-muted hover:text-text'
             }`}
           >
-            Active Streaks
+            {t('tabStreaks')}
           </button>
         </div>
       </div>
@@ -64,11 +66,11 @@ export default function Leaderboard() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-background text-text-muted text-xs uppercase tracking-wider border-b border-border">
-                <th className="p-6 font-medium">Rank</th>
-                <th className="p-6 font-medium">Contributor</th>
-                <th className="p-6 font-medium">Village/Region</th>
+                <th className="p-6 font-medium">{t('colRank')}</th>
+                <th className="p-6 font-medium">{t('colContributor')}</th>
+                <th className="p-6 font-medium">{t('colVillage')}</th>
                 <th className="p-6 font-medium text-right">
-                  {activeTab === 'contributors' ? 'Total Amount' : 'Current Streak'}
+                  {activeTab === 'contributors' ? t('colTotalAmount') : t('colCurrentStreak')}
                 </th>
               </tr>
             </thead>
@@ -120,17 +122,17 @@ export default function Leaderboard() {
           
           {(activeTab === 'contributors' ? data.top_contributors : data.top_streaks).length === 0 && (
             <div className="p-12 text-center text-text-muted">
-              No data available yet. Start contributing to be the first!
+              {t('leaderboardEmpty')}
             </div>
           )}
         </div>
       )}
       
       <div className="mt-12 bg-primary/5 p-8 rounded-2xl border border-primary/10 text-center">
-        <h3 className="text-xl font-bold font-heading text-text mb-2">Want to see your name here?</h3>
-        <p className="text-text-muted mb-6">Every contribution, big or small, helps us build a stronger village together.</p>
+        <h3 className="text-xl font-bold font-heading text-text mb-2">{t('leaderboardCtaTitle')}</h3>
+        <p className="text-text-muted mb-6">{t('leaderboardCtaDesc')}</p>
         <Link to="/campaigns" className="inline-block px-8 py-3 bg-primary text-white font-bold rounded-full shadow-lg hover:bg-orange-600 transition-transform transform hover:-translate-y-1">
-          Contribute Now
+          {t('contributeNow')}
         </Link>
       </div>
     </div>

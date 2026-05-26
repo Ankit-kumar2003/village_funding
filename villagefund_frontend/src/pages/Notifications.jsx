@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../api/notifications';
+import { useLanguage } from '../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bell,
@@ -16,6 +17,7 @@ import {
 } from 'lucide-react';
 
 export default function Notifications() {
+  const { t } = useLanguage();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -100,14 +102,14 @@ export default function Notifications() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 border-b pb-6 border-gray-200">
           <div>
             <h1 className="text-3xl font-black font-heading text-gray-800 flex items-center gap-3">
-              Notification Hub
+              {t('notifTitle')}
               {unreadCount > 0 && (
                 <span className="text-xs bg-orange-500 text-white font-black px-2.5 py-1 rounded-full">
-                  {unreadCount} New
+                  {unreadCount} {t('notifNew')}
                 </span>
               )}
             </h1>
-            <p className="text-gray-500 text-sm mt-1">Stay updated with campaigns, milestones, and expense approvals in Sundarpur.</p>
+            <p className="text-gray-500 text-sm mt-1">{t('notifSubtitle')}</p>
           </div>
 
           {unreadCount > 0 && (
@@ -116,20 +118,20 @@ export default function Notifications() {
               className="flex items-center gap-1.5 bg-orange-100 hover:bg-orange-200 text-orange-700 font-extrabold px-4 py-2 rounded-xl text-xs transition-colors"
             >
               <CheckCheck className="w-4 h-4" />
-              Mark All as Read
+              {t('notifMarkAllRead')}
             </button>
           )}
         </div>
 
         {loading ? (
-          <div className="py-20 text-center text-gray-500 font-bold">Loading your notifications...</div>
+          <div className="py-20 text-center text-gray-500 font-bold">{t('notifLoading')}</div>
         ) : notifications.length === 0 ? (
           <div className="bg-white rounded-3xl border border-gray-200 p-12 text-center shadow-sm max-w-xl mx-auto">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
               <Bell className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-extrabold text-gray-800 font-heading">No notifications yet</h3>
-            <p className="text-gray-500 text-sm mt-1">We will notify you when new campaigns launch, or when your payments are approved!</p>
+            <h3 className="text-lg font-extrabold text-gray-800 font-heading">{t('notifNone')}</h3>
+            <p className="text-gray-500 text-sm mt-1">{t('notifNoneDesc')}</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -170,7 +172,7 @@ export default function Notifications() {
                           onClick={() => handleMarkAsRead(n.id)}
                           className="inline-flex items-center gap-1 text-[11px] font-black text-orange-600 hover:text-orange-700 hover:underline"
                         >
-                          View Campaign
+                          {t('notifViewCampaign')}
                           <ArrowRight className="w-3 h-3" />
                         </Link>
                       )}
@@ -179,7 +181,7 @@ export default function Notifications() {
                           onClick={() => handleMarkAsRead(n.id)}
                           className="inline-flex items-center gap-1 text-[11px] font-bold text-gray-400 hover:text-orange-600"
                         >
-                          Mark as read
+                          {t('notifMarkRead')}
                         </button>
                       )}
                     </div>

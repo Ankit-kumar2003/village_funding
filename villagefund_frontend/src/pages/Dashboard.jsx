@@ -1,11 +1,13 @@
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { getUserContributions } from '../api/contributions';
 import IndianCurrency from '../components/common/IndianCurrency';
 import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
+  const { t } = useLanguage();
   const [contributions, setContributions] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,8 +33,8 @@ export default function Dashboard() {
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between items-center mb-8 border-b pb-6">
         <div>
-          <h1 className="text-3xl font-heading font-bold text-primary">My Dashboard</h1>
-          <p className="text-gray-600 mt-2">Welcome back, {user?.full_name}</p>
+          <h1 className="text-3xl font-heading font-bold text-primary">{t('dashboardTitle')}</h1>
+          <p className="text-gray-600 mt-2">{t('dashboardWelcome')} {user?.full_name}</p>
         </div>
         
         {['TREASURER', 'SUPER_ADMIN'].includes(user?.role) && (
@@ -40,7 +42,7 @@ export default function Dashboard() {
             to="/admin" 
             className="mt-4 md:mt-0 bg-secondary text-white px-6 py-2 rounded-md font-medium hover:bg-green-700 transition-colors"
           >
-            Go to Admin Panel
+            {t('dashboardAdminPanel')}
           </Link>
         )}
       </div>
@@ -53,7 +55,7 @@ export default function Dashboard() {
             </svg>
           </div>
           <div>
-            <p className="text-sm text-gray-500 font-medium">Total Contributed</p>
+            <p className="text-sm text-gray-500 font-medium">{t('dashboardTotalContributed')}</p>
             <p className="text-2xl font-bold text-text"><IndianCurrency amount={totalContributed} /></p>
           </div>
         </div>
@@ -65,8 +67,8 @@ export default function Dashboard() {
             </svg>
           </div>
           <div>
-            <p className="text-sm text-gray-500 font-medium">Active Streak</p>
-            <p className="text-2xl font-bold text-text">3 Months</p>
+            <p className="text-sm text-gray-500 font-medium">{t('dashboardActiveStreak')}</p>
+            <p className="text-2xl font-bold text-text">3 {t('dashboardMonths')}</p>
           </div>
         </div>
 
@@ -77,7 +79,7 @@ export default function Dashboard() {
             </svg>
           </div>
           <div>
-            <p className="text-sm text-gray-500 font-medium">Badges Earned</p>
+            <p className="text-sm text-gray-500 font-medium">{t('dashboardBadgesEarned')}</p>
             <p className="text-2xl font-bold text-text">2</p>
           </div>
         </div>
@@ -85,26 +87,26 @@ export default function Dashboard() {
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-100">
-          <h2 className="text-xl font-bold font-heading text-text">My Contributions History</h2>
+          <h2 className="text-xl font-bold font-heading text-text">{t('dashboardContribHistory')}</h2>
         </div>
         
         {loading ? (
-          <div className="p-8 text-center text-gray-500">Loading...</div>
+          <div className="p-8 text-center text-gray-500">{t('loading')}</div>
         ) : contributions.length === 0 ? (
           <div className="p-12 text-center">
-            <p className="text-gray-500 mb-4">You haven't made any contributions yet.</p>
-            <Link to="/campaigns" className="text-primary font-medium hover:underline">Explore Campaigns</Link>
+            <p className="text-gray-500 mb-4">{t('dashboardNoContrib')}</p>
+            <Link to="/campaigns" className="text-primary font-medium hover:underline">{t('dashboardExploreCampaigns')}</Link>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-50 text-gray-600 text-sm border-b border-gray-100">
-                  <th className="p-4 font-medium">Date</th>
-                  <th className="p-4 font-medium">Campaign ID</th>
-                  <th className="p-4 font-medium">Amount</th>
-                  <th className="p-4 font-medium">Transaction ID / UTR</th>
-                  <th className="p-4 font-medium">Status</th>
+                  <th className="p-4 font-medium">{t('dashboardColDate')}</th>
+                  <th className="p-4 font-medium">{t('dashboardColCampaignId')}</th>
+                  <th className="p-4 font-medium">{t('dashboardColAmount')}</th>
+                  <th className="p-4 font-medium">{t('dashboardColUtr')}</th>
+                  <th className="p-4 font-medium">{t('dashboardColStatus')}</th>
                 </tr>
               </thead>
               <tbody className="text-sm text-gray-700">

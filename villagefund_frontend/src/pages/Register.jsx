@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { register } from '../api/auth';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Register() {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({ phone_number: '', full_name: '', email: '', password: '', password_confirm: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -12,27 +14,27 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.password_confirm) {
-      setError('Passwords do not match');
+      setError(t('registerPasswordMismatch'));
       return;
     }
     try {
       await register(formData);
       navigate('/login', { state: { message: 'Registration successful! Please log in.' } });
     } catch (err) {
-      setError('Registration failed. Please check your details.');
+      setError(t('registerFailed'));
     }
   };
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-background px-4">
       <div className="max-w-md w-full bg-white rounded-lg shadow-xl p-8 border border-gray-100">
-        <h2 className="text-3xl font-heading font-bold text-center text-primary mb-8">Join VillageFund</h2>
+        <h2 className="text-3xl font-heading font-bold text-center text-primary mb-8">{t('registerTitle')}</h2>
         
         {error && <div className="bg-red-50 text-red-500 p-3 rounded mb-4 text-sm text-center">{error}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-text mb-1">Full Name</label>
+            <label className="block text-sm font-medium text-text mb-1">{t('registerName')}</label>
             <input 
               type="text" 
               name="full_name" 
@@ -43,7 +45,7 @@ export default function Register() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-text mb-1">Email Address (Optional)</label>
+            <label className="block text-sm font-medium text-text mb-1">{t('registerEmail')}</label>
             <input 
               type="email" 
               name="email" 
@@ -53,7 +55,7 @@ export default function Register() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-text mb-1">Phone Number</label>
+            <label className="block text-sm font-medium text-text mb-1">{t('registerPhone')}</label>
             <input 
               type="text" 
               name="phone_number" 
@@ -64,7 +66,7 @@ export default function Register() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-text mb-1">Password</label>
+            <label className="block text-sm font-medium text-text mb-1">{t('registerPassword')}</label>
             <input 
               type="password" 
               name="password" 
@@ -75,7 +77,7 @@ export default function Register() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-text mb-1">Confirm Password</label>
+            <label className="block text-sm font-medium text-text mb-1">{t('registerConfirmPassword')}</label>
             <input 
               type="password" 
               name="password_confirm" 
@@ -86,12 +88,12 @@ export default function Register() {
             />
           </div>
           <button type="submit" className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-orange-600 transition-colors font-medium mt-6">
-            Register
+            {t('registerBtn')}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-gray-600">
-          Already have an account? <Link to="/login" className="text-secondary font-medium hover:underline">Log in here</Link>
+          {t('registerHaveAccount')} <Link to="/login" className="text-secondary font-medium hover:underline">{t('registerLoginLink')}</Link>
         </p>
       </div>
     </div>

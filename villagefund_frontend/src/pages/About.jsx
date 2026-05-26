@@ -101,22 +101,22 @@ export default function About() {
   const teamMembers = [
     {
       name: 'Ankit Kumar',
-      role: 'Platform Creator & Developer',
-      description: 'B.Tech CSE 2026, MM Engineering College, Mullana, Haryana',
+      role: t('aboutTeamRole1'),
+      description: t('aboutTeamDesc1'),
       initial: 'AK',
       gradient: 'from-primary to-orange-600',
     },
     {
       name: 'Village Treasurer',
-      role: 'Active Treasurer',
-      description: 'Manages all campaigns, verifies contributions, and posts expenses with receipts.',
+      role: t('aboutTeamRole2'),
+      description: t('aboutTeamDesc2'),
       initial: 'VT',
       gradient: 'from-secondary to-green-600',
     },
     {
       name: 'Panchayat Committee',
-      role: 'Super Admin & Oversight',
-      description: 'Approves multi-signature expenses, manages roles, and maintains the audit log.',
+      role: t('aboutTeamRole3'),
+      description: t('aboutTeamDesc3'),
       initial: 'PC',
       gradient: 'from-blue-500 to-indigo-600',
     },
@@ -369,13 +369,13 @@ export default function About() {
             variants={staggerContainer}
           >
             <motion.span variants={fadeUp} className="inline-block text-sm font-semibold tracking-wider uppercase text-primary bg-primary/10 px-3 py-1 rounded-full mb-4">
-              The Team
+              {t('aboutTeamBadge')}
             </motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-4xl font-bold font-heading text-text mb-4">
-              Village Committee & Builder
+              {t('aboutTeamTitle')}
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="text-text-muted text-lg">
-              Meet the people making transparent governance a reality in Sundarpur.
+              {t('aboutTeamSubtitle')}
             </motion.p>
           </motion.div>
 
@@ -493,14 +493,14 @@ export default function About() {
               </div>
 
               <h2 className="text-2xl md:text-3xl font-bold font-heading text-text mb-3">
-                Built with ❤️ for Sundarpur
+                {t('aboutBuiltWith')}
               </h2>
               <p className="text-text-muted text-lg leading-relaxed mb-2">
-                This platform was designed and developed by
+                {t('aboutBuiltByLabel')}
               </p>
-              <h3 className="text-xl font-bold font-heading text-primary">Ankit Kumar</h3>
+              <h3 className="text-xl font-bold font-heading text-primary">{t('aboutBuiltByName')}</h3>
               <p className="text-text-muted mt-1">
-                B.Tech CSE 2026 · MM Engineering College, Mullana, Haryana
+                {t('aboutBuiltByRole')}
               </p>
 
               <div className="flex justify-center items-center space-x-4 mt-8">
@@ -525,7 +525,7 @@ export default function About() {
               </div>
 
               <p className="text-text-muted text-xs mt-8">
-                Built with Django · React · Tailwind CSS · Cashfree · Cloudinary · Vercel · Railway
+                {t('aboutTechStack')}
               </p>
             </motion.div>
           </motion.div>
@@ -544,24 +544,24 @@ export default function About() {
             className="space-y-6"
           >
             <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-bold font-heading">
-              Ready to support your village?
+              {t('aboutCtaTitle')}
             </motion.h2>
             <motion.p variants={fadeUp} custom={1} className="text-xl text-green-100 max-w-2xl mx-auto">
-              Join Sundarpur's transparent community fundraising platform — every contribution matters, and every rupee is tracked.
+              {t('aboutCtaSubtitle')}
             </motion.p>
             <motion.div variants={fadeUp} custom={2} className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-5 pt-4">
               <Link
                 to="/campaigns"
                 className="inline-flex items-center space-x-2 px-8 py-4 bg-white text-secondary font-extrabold rounded-full shadow-lg hover:bg-gray-50 transition-colors"
               >
-                <span>Explore Campaigns</span>
+                <span>{t('aboutCtaBtnCampaigns')}</span>
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <Link
                 to="/transparency"
                 className="px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-bold rounded-full transition-colors"
               >
-                View Transparency
+                {t('aboutCtaBtnTransparency')}
               </Link>
             </motion.div>
           </motion.div>

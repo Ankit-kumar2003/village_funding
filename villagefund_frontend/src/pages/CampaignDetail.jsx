@@ -4,8 +4,10 @@ import { getCampaignDetail, getCampaignUpdates } from '../api/campaigns';
 import ProgressBar from '../components/common/ProgressBar';
 import IndianCurrency from '../components/common/IndianCurrency';
 import ContributionForm from '../components/campaigns/ContributionForm';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function CampaignDetail() {
+  const { t } = useLanguage();
   const { id } = useParams();
   const [campaign, setCampaign] = useState(null);
   const [updates, setUpdates] = useState([]);
@@ -34,12 +36,12 @@ export default function CampaignDetail() {
   }
 
   if (!campaign) {
-    return <div className="container mx-auto px-4 py-16 text-center"><h2 className="text-2xl font-bold text-gray-700">Campaign not found</h2><Link to="/campaigns" className="text-primary font-medium mt-4 inline-block hover:underline">Back to Campaigns</Link></div>;
+    return <div className="container mx-auto px-4 py-16 text-center"><h2 className="text-2xl font-bold text-gray-700">{t('campaignNotFound')}</h2><Link to="/campaigns" className="text-primary font-medium mt-4 inline-block hover:underline">{t('backToCampaigns')}</Link></div>;
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Link to="/campaigns" className="text-sm text-gray-500 hover:text-primary mb-6 inline-block font-medium">&larr; Back to all campaigns</Link>
+      <Link to="/campaigns" className="text-sm text-gray-500 hover:text-primary mb-6 inline-block font-medium">{t('backToAll')}</Link>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
@@ -51,7 +53,7 @@ export default function CampaignDetail() {
                 <img src={campaign.cover_image} alt={campaign.title} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary">
-                  <span className="font-heading text-2xl font-medium">No Image Available</span>
+                  <span className="font-heading text-2xl font-medium">{t('noImageAvailable')}</span>
                 </div>
               )}
             </div>
@@ -73,7 +75,7 @@ export default function CampaignDetail() {
           {/* Budget Breakdown */}
           {campaign.budget_items && campaign.budget_items.length > 0 && (
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h2 className="text-2xl font-bold font-heading mb-6 border-b pb-4 text-text">Budget Breakdown</h2>
+              <h2 className="text-2xl font-bold font-heading mb-6 border-b pb-4 text-text">{t('budgetBreakdown')}</h2>
               <div className="space-y-4">
                 {campaign.budget_items.map(item => (
                   <div key={item.id} className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
@@ -87,9 +89,9 @@ export default function CampaignDetail() {
 
           {/* Updates */}
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <h2 className="text-2xl font-bold font-heading mb-6 border-b pb-4 text-text">Campaign Updates</h2>
+            <h2 className="text-2xl font-bold font-heading mb-6 border-b pb-4 text-text">{t('campaignUpdates')}</h2>
             {updates.length === 0 ? (
-              <p className="text-gray-500 italic">No updates posted yet.</p>
+              <p className="text-gray-500 italic">{t('noUpdatesYet')}</p>
             ) : (
               <div className="space-y-8">
                 {updates.map(update => (
@@ -113,7 +115,7 @@ export default function CampaignDetail() {
                   <IndianCurrency amount={campaign.raised_amount} />
                 </div>
                 <div className="text-gray-500 mb-5 text-sm">
-                  raised of <span className="font-bold text-text"><IndianCurrency amount={campaign.goal_amount} /></span> goal
+                  {t('raisedOf')} <span className="font-bold text-text"><IndianCurrency amount={campaign.goal_amount} /></span> {t('goal').toLowerCase()}
                 </div>
                 <ProgressBar percentage={campaign.progress_percentage} />
               </div>
@@ -124,22 +126,22 @@ export default function CampaignDetail() {
                 }`}>
                   {campaign.status}
                 </span>
-                <span className="font-medium">Ends: {new Date(campaign.end_date).toLocaleDateString()}</span>
+                <span className="font-medium">{t('ends')}: {new Date(campaign.end_date).toLocaleDateString()}</span>
               </div>
 
               <ContributionForm campaignId={campaign.id} />
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 mt-6">
-              <h3 className="font-bold font-heading mb-4 text-lg">Transparency Info</h3>
+              <h3 className="font-bold font-heading mb-4 text-lg">{t('transparencyInfo')}</h3>
               <ul className="text-sm space-y-3 text-gray-600">
                 <li className="flex justify-between border-b border-gray-50 pb-2">
-                  <span className="font-medium text-text">Created By</span> 
-                  <span>{campaign.created_by?.full_name || 'Village Committee'}</span>
+                  <span className="font-medium text-text">{t('createdBy')}</span> 
+                  <span>{campaign.created_by?.full_name || t('villageCommittee')}</span>
                 </li>
                 <li className="flex justify-between">
-                  <span className="font-medium text-text">Treasurer</span> 
-                  <span>{campaign.treasurer?.full_name || 'Pending'}</span>
+                  <span className="font-medium text-text">{t('treasurer')}</span> 
+                  <span>{campaign.treasurer?.full_name || t('pending')}</span>
                 </li>
               </ul>
             </div>
