@@ -31,7 +31,6 @@ const LinkedinIcon = ({ className }) => (
 );
 import api from '../api/axios';
 import { useLanguage } from '../context/LanguageContext';
-import MapComponent from '../components/common/MapComponent';
 
 // Animation variants
 const fadeUp = {
@@ -51,6 +50,7 @@ const staggerContainer = {
 export default function About() {
   const { t } = useLanguage();
   const [stats, setStats] = useState(null);
+  const [activeMedia, setActiveMedia] = useState('map'); // 'map' | 'video'
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -203,9 +203,59 @@ export default function About() {
               </div>
             </div>
 
-            {/* Embedded Live Map Card */}
-            <div className="lg:col-span-7 h-[420px]">
-              <MapComponent />
+            {/* Embedded Satellite Map & Village Documentary Card */}
+            <div className="lg:col-span-7 bg-white dark:bg-slate-800 p-4 rounded-3xl border border-gray-200 dark:border-slate-700/50 shadow-xl space-y-4">
+              {/* Tab Selector */}
+              <div className="flex gap-2 p-1 bg-gray-100 dark:bg-slate-900 rounded-xl max-w-xs">
+                <button
+                  onClick={() => setActiveMedia('map')}
+                  className={`flex-grow py-2 px-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${
+                    activeMedia === 'map'
+                      ? 'bg-white dark:bg-slate-800 text-primary shadow-sm'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  🛰️ Satellite Map
+                </button>
+                <button
+                  onClick={() => setActiveMedia('video')}
+                  className={`flex-grow py-2 px-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${
+                    activeMedia === 'video'
+                      ? 'bg-white dark:bg-slate-800 text-secondary shadow-sm'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  🎥 Village Tour
+                </button>
+              </div>
+
+              {/* Media Content Box */}
+              <div className="h-[360px] relative overflow-hidden rounded-2xl border border-gray-150 dark:border-slate-700">
+                {activeMedia === 'map' ? (
+                  <iframe
+                    title="Mahuaa Village Basecamp Satellite View"
+                    width="100%"
+                    height="100%"
+                    frameBorder="0"
+                    style={{ border: 0, borderRadius: '1rem' }}
+                    src="https://maps.google.com/maps?q=27.189333,84.183806&t=k&z=17&ie=UTF8&iwloc=&output=embed"
+                    allowFullScreen
+                    loading="lazy"
+                  ></iframe>
+                ) : (
+                  <iframe
+                    title="Mahuaa Village Documentary"
+                    width="100%"
+                    height="100%"
+                    frameBorder="0"
+                    style={{ border: 0, borderRadius: '1rem' }}
+                    src="https://www.youtube.com/embed/n4K_bKskxrs"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    loading="lazy"
+                  ></iframe>
+                )}
+              </div>
             </div>
 
           </div>
