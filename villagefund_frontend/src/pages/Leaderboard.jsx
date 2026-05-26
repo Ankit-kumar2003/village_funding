@@ -63,8 +63,9 @@ export default function Leaderboard() {
         </div>
       ) : (
         <div className="bg-surface rounded-2xl shadow-xl border border-border overflow-hidden transition-all duration-300">
-          <table className="w-full text-left border-collapse">
-            <thead>
+          <div className="overflow-x-auto w-full">
+            <table className="w-full text-left border-collapse min-w-[600px]">
+              <thead>
               <tr className="bg-background text-text-muted text-xs uppercase tracking-wider border-b border-border">
                 <th className="p-6 font-medium">{t('colRank')}</th>
                 <th className="p-6 font-medium">{t('colContributor')}</th>
@@ -118,7 +119,8 @@ export default function Leaderboard() {
                 </tr>
               ))}
             </tbody>
-          </table>
+            </table>
+          </div>
           
           {(activeTab === 'contributors' ? data.top_contributors : data.top_streaks).length === 0 && (
             <div className="p-12 text-center text-text-muted">

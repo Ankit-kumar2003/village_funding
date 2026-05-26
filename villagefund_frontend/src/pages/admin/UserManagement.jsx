@@ -108,8 +108,8 @@ export default function UserManagement() {
           ) : filteredUsers.length === 0 ? (
             <div className="py-20 text-center text-gray-400 font-bold">No users matched your query.</div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+            <div className="overflow-x-auto w-full">
+              <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr className="bg-gray-50 text-gray-500 text-[10px] font-black uppercase tracking-wider border-b border-gray-100">
                     <th className="p-5">Community Member</th>

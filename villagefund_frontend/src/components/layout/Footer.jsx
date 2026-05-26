@@ -4,8 +4,8 @@ export default function Footer() {
   const { t } = useLanguage();
 
   return (
-    <footer className="bg-text text-background py-8 mt-auto">
-      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer className="bg-text text-background py-10 mt-auto">
+      <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10 text-center md:text-left">
         <div>
           <h3 className="text-xl font-heading font-bold text-primary mb-4">VillageFund</h3>
           <p className="text-sm text-gray-400">
@@ -29,7 +29,7 @@ export default function Footer() {
           </p>
         </div>
       </div>
-      <div className="text-center text-xs text-gray-500 mt-8 pt-4 border-t border-gray-700">
+      <div className="text-center text-xs text-gray-500 mt-10 pt-6 border-t border-gray-700 px-4">
         &copy; {new Date().getFullYear()} VillageFund. {t('footerRights')}
       </div>
     </footer>

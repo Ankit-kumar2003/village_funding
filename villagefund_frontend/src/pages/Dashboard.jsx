@@ -98,8 +98,8 @@ export default function Dashboard() {
             <Link to="/campaigns" className="text-primary font-medium hover:underline">{t('dashboardExploreCampaigns')}</Link>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+          <div className="overflow-x-auto w-full">
+            <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
                 <tr className="bg-gray-50 text-gray-600 text-sm border-b border-gray-100">
                   <th className="p-4 font-medium">{t('dashboardColDate')}</th>

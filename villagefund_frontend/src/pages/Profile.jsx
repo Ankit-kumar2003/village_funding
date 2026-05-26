@@ -190,8 +190,8 @@ export default function Profile() {
                     <p className="mb-4">{t('profileNoContrib')}</p>
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
+                  <div className="overflow-x-auto w-full">
+                    <table className="w-full text-left border-collapse min-w-[800px]">
                       <thead>
                         <tr className="bg-gray-50 text-gray-500 text-[10px] font-black uppercase tracking-wider border-b border-gray-100">
                           <th className="p-5">{t('profileColDate')}</th>

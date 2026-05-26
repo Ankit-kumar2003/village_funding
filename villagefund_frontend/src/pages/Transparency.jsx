@@ -73,8 +73,8 @@ export default function Transparency() {
             {expenses.filter(e => e.approval_status === 'APPROVED').length === 0 ? (
               <div className="p-12 text-center text-gray-500">{t('noExpensesApproved')}</div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+              <div className="overflow-x-auto w-full">
+                <table className="w-full text-left border-collapse min-w-[600px]">
                   <thead>
                     <tr className="bg-white text-gray-500 text-xs uppercase tracking-wider border-b border-gray-100">
                       <th className="p-4 font-medium">{t('colDate')}</th>
