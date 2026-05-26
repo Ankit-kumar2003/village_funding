@@ -139,7 +139,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # Managed in STORAGES below
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 # Email Settings (Gmail)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -185,25 +185,8 @@ CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': config('CLOUDINARY_URL', default='')
 }
 
-# Unified Storages Configuration (Django 5.0 compatible)
 if config('CLOUDINARY_URL', default=''):
-    STORAGES = {
-        "default": {
-            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-        },
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        },
-    }
-else:
-    STORAGES = {
-        "default": {
-            "BACKEND": "django.core.files.storage.FileSystemStorage",
-        },
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        },
-    }
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Platform Config
 VILLAGE_NAME = "Mahuaa"
