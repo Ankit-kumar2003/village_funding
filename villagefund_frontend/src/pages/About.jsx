@@ -31,6 +31,7 @@ const LinkedinIcon = ({ className }) => (
 );
 import api from '../api/axios';
 import { useLanguage } from '../context/LanguageContext';
+import MapComponent from '../components/common/MapComponent';
 
 // Animation variants
 const fadeUp = {
@@ -125,10 +126,11 @@ export default function About() {
   return (
     <div className="w-full">
       {/* ───────────── Section 1: Village Hero ───────────── */}
-      <section className="relative bg-gradient-to-br from-primary/90 via-orange-700 to-orange-900 text-white overflow-hidden">
-        {/* Decorative circles */}
+      <section className="relative bg-gradient-to-br from-primary/95 via-orange-800 to-orange-950 text-white overflow-hidden">
+        {/* Decorative circles + Topographic lines */}
         <div className="absolute -top-32 -right-32 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
         <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-white/5 rounded-full blur-2xl" />
+        <div className="absolute inset-0 opacity-20 bg-topography"></div>
 
         <div className="container mx-auto px-4 py-28 md:py-36 relative z-10">
           <motion.div
@@ -202,20 +204,8 @@ export default function About() {
             </div>
 
             {/* Embedded Live Map Card */}
-            <div className="lg:col-span-7 bg-white p-4 rounded-3xl border border-gray-200 shadow-xl relative overflow-hidden h-[420px]">
-              <div className="absolute inset-0 bg-gray-50/50 flex items-center justify-center -z-10">
-                <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent"></div>
-              </div>
-              <iframe
-                title="Mahuaa Village Basecamp Satellite View"
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                style={{ border: 0, borderRadius: '1.25rem' }}
-                src="https://maps.google.com/maps?q=27.189333,84.183806&t=k&z=17&ie=UTF8&iwloc=&output=embed"
-                allowFullScreen
-                loading="lazy"
-              ></iframe>
+            <div className="lg:col-span-7 h-[420px]">
+              <MapComponent />
             </div>
 
           </div>

@@ -4,6 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { getUserContributions } from '../api/contributions';
 import { getUserBadges, getAllBadges } from '../api/badges';
 import IndianCurrency from '../components/common/IndianCurrency';
+import ThreeDBadgeCard from '../components/profile/3DBadgeCard';
 import { motion } from 'framer-motion';
 import {
   User,
@@ -258,38 +259,12 @@ export default function Profile() {
                     allBadges.map((badge) => {
                       const earned = userBadges.some((ub) => ub.badge === badge.id);
                       return (
-                        <div 
-                          key={badge.id}
-                          className={`p-6 rounded-2xl border transition-all duration-300 relative overflow-hidden flex items-start gap-4 ${
-                            earned 
-                              ? 'bg-gradient-to-br from-white to-amber-50/20 border-amber-200/80 shadow-md' 
-                              : 'bg-white border-gray-200/80 grayscale opacity-60'
-                          }`}
-                        >
-                          <div className={`p-4 rounded-2xl ${earned ? 'bg-amber-100 text-amber-600' : 'bg-gray-100 text-gray-400'}`}>
-                            <Award className="w-8 h-8" />
-                          </div>
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-1.5">
-                              <h4 className="font-extrabold font-heading text-gray-800">{badge.name}</h4>
-                              {earned && (
-                                <span className="bg-amber-500 text-white text-[9px] font-black uppercase px-1.5 py-0.5 rounded">
-                                  {t('profileBadgeEarned')}
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-xs text-gray-500 leading-relaxed font-semibold">{badge.description}</p>
-                            <p className="text-[10px] text-orange-600 font-black uppercase tracking-wider pt-1">
-                              {badge.criteria_type.replace('_', ' ')}: {badge.criteria_value}
-                            </p>
-                          </div>
-
-                          {!earned && (
-                            <div className="absolute top-3 right-3 text-gray-300">
-                              <Lock className="w-4 h-4" />
-                            </div>
-                          )}
-                        </div>
+                        <ThreeDBadgeCard 
+                          key={badge.id} 
+                          badge={badge} 
+                          earned={earned} 
+                          t={t} 
+                        />
                       );
                     })
                   )}
