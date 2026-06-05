@@ -46,10 +46,10 @@ export default function ExpenseForm({ onExpenseAdded }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+    <div className="bg-surface p-6 rounded-lg shadow-sm border border-border">
       <h3 className="text-xl font-bold font-heading mb-4 text-text">Log New Expense</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {error && <div className="bg-red-50 text-red-500 p-3 rounded text-sm">{error}</div>}
+        {error && <div className="bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-400 border border-red-100 dark:border-red-900/30 p-3 rounded-xl text-sm">{error}</div>}
         
         <div>
           <label className="block text-sm font-medium text-text mb-1">Campaign</label>
@@ -57,12 +57,12 @@ export default function ExpenseForm({ onExpenseAdded }) {
             name="campaign" 
             value={formData.campaign} 
             onChange={handleChange} 
-            className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+            className="w-full px-4 py-2 bg-background text-text border border-border rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             required
           >
-            <option value="">Select Campaign</option>
+            <option value="" className="bg-surface text-text">Select Campaign</option>
             {campaigns.map(c => (
-              <option key={c.id} value={c.id}>{c.title}</option>
+              <option key={c.id} value={c.id} className="bg-surface text-text">{c.title}</option>
             ))}
           </select>
         </div>
@@ -74,7 +74,7 @@ export default function ExpenseForm({ onExpenseAdded }) {
             name="title" 
             value={formData.title} 
             onChange={handleChange} 
-            className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+            className="w-full px-4 py-2 bg-background text-text border border-border rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             required 
           />
         </div>
@@ -87,10 +87,10 @@ export default function ExpenseForm({ onExpenseAdded }) {
               name="amount" 
               value={formData.amount} 
               onChange={handleChange} 
-              className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+              className="w-full px-4 py-2 bg-background text-text border border-border rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary"
               required 
             />
-            <p className="text-xs text-gray-500 mt-1">If &gt; ₹2000, requires multi-sig.</p>
+            <p className="text-xs text-text-muted mt-1">If &gt; ₹2000, requires multi-sig.</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-text mb-1">Category</label>
@@ -98,13 +98,13 @@ export default function ExpenseForm({ onExpenseAdded }) {
               name="category" 
               value={formData.category} 
               onChange={handleChange} 
-              className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+              className="w-full px-4 py-2 bg-background text-text border border-border rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             >
-              <option value="MATERIALS">Materials</option>
-              <option value="LABOR">Labor</option>
-              <option value="LOGISTICS">Logistics</option>
-              <option value="FEES">Fees</option>
-              <option value="OTHER">Other</option>
+              <option value="MATERIALS" className="bg-surface text-text">Materials</option>
+              <option value="LABOR" className="bg-surface text-text">Labor</option>
+              <option value="LOGISTICS" className="bg-surface text-text">Logistics</option>
+              <option value="FEES" className="bg-surface text-text">Fees</option>
+              <option value="OTHER" className="bg-surface text-text">Other</option>
             </select>
           </div>
         </div>
@@ -116,7 +116,7 @@ export default function ExpenseForm({ onExpenseAdded }) {
             name="vendor_name" 
             value={formData.vendor_name} 
             onChange={handleChange} 
-            className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+            className="w-full px-4 py-2 bg-background text-text border border-border rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             required 
           />
         </div>
@@ -124,7 +124,7 @@ export default function ExpenseForm({ onExpenseAdded }) {
         <button 
           type="submit" 
           disabled={loading}
-          className={`w-full text-white py-2 rounded-md font-bold transition-colors ${loading ? 'bg-gray-400' : 'bg-primary hover:bg-orange-600'}`}
+          className={`w-full text-white py-2 rounded-md font-bold transition-colors ${loading ? 'bg-gray-400 dark:bg-slate-700' : 'bg-primary hover:bg-orange-600'}`}
         >
           {loading ? 'Logging...' : 'Log Expense'}
         </button>
