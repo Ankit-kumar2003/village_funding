@@ -27,10 +27,10 @@ export default function Register() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-background px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-xl p-8 border border-gray-100">
+      <div className="max-w-md w-full bg-surface rounded-lg shadow-xl p-8 border border-border">
         <h2 className="text-3xl font-heading font-bold text-center text-primary mb-8">{t('registerTitle')}</h2>
         
-        {error && <div className="bg-red-50 text-red-500 p-3 rounded mb-4 text-sm text-center">{error}</div>}
+        {error && <div className="bg-red-50 dark:bg-red-950/30 text-red-500 p-3 rounded mb-4 text-sm text-center">{error}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -38,7 +38,7 @@ export default function Register() {
             <input 
               type="text" 
               name="full_name" 
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary outline-none"
+              className="w-full px-4 py-2 border border-border bg-background rounded-md text-text focus:ring-primary focus:border-primary outline-none"
               value={formData.full_name} 
               onChange={handleChange} 
               required 
@@ -49,7 +49,7 @@ export default function Register() {
             <input 
               type="email" 
               name="email" 
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary outline-none"
+              className="w-full px-4 py-2 border border-border bg-background rounded-md text-text focus:ring-primary focus:border-primary outline-none"
               value={formData.email} 
               onChange={handleChange} 
             />
@@ -59,7 +59,7 @@ export default function Register() {
             <input 
               type="text" 
               name="phone_number" 
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary outline-none"
+              className="w-full px-4 py-2 border border-border bg-background rounded-md text-text focus:ring-primary focus:border-primary outline-none"
               value={formData.phone_number} 
               onChange={handleChange} 
               required 
@@ -70,7 +70,7 @@ export default function Register() {
             <input 
               type="password" 
               name="password" 
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary outline-none"
+              className="w-full px-4 py-2 border border-border bg-background rounded-md text-text focus:ring-primary focus:border-primary outline-none"
               value={formData.password} 
               onChange={handleChange} 
               required 
@@ -81,7 +81,7 @@ export default function Register() {
             <input 
               type="password" 
               name="password_confirm" 
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary outline-none"
+              className="w-full px-4 py-2 border border-border bg-background rounded-md text-text focus:ring-primary focus:border-primary outline-none"
               value={formData.password_confirm} 
               onChange={handleChange} 
               required 
@@ -92,7 +92,7 @@ export default function Register() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-600">
+        <p className="mt-6 text-center text-sm text-text-muted">
           {t('registerHaveAccount')} <Link to="/login" className="text-secondary font-medium hover:underline">{t('registerLoginLink')}</Link>
         </p>
       </div>

@@ -58,23 +58,23 @@ export default function ContributionForm({ campaignId }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 mt-8">
+    <div className="bg-surface p-6 rounded-lg shadow-sm border border-border mt-8">
       <h3 className="text-xl font-bold font-heading mb-4 text-primary">{t('makeContribution')}</h3>
       
       {!user ? (
-        <div className="bg-orange-50 p-4 rounded-md text-orange-800 mb-4">
+        <div className="bg-orange-50 dark:bg-orange-950/30 p-4 rounded-md text-orange-850 dark:text-orange-350 mb-4">
           {t('loginToContributePrefix')} <button onClick={() => navigate('/login')} className="font-bold underline">{t('loginToContribute')}</button> {t('loginToContributeSuffix')}
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && <div className="bg-red-50 text-red-500 p-3 rounded text-sm">{error}</div>}
+          {error && <div className="bg-red-50 dark:bg-red-950/30 text-red-500 p-3 rounded text-sm">{error}</div>}
           
           <div>
             <label className="block text-sm font-medium text-text mb-1">{t('amountLabel')}</label>
             <input 
               type="number" 
               name="amount" 
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary outline-none"
+              className="w-full px-4 py-2 border border-border bg-background rounded-md text-text focus:ring-primary focus:border-primary outline-none"
               value={formData.amount} 
               onChange={handleChange} 
               min="1"
@@ -88,7 +88,7 @@ export default function ContributionForm({ campaignId }) {
             <label className="block text-sm font-medium text-text mb-1">{t('noteLabel')}</label>
             <textarea 
               name="note" 
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary outline-none"
+              className="w-full px-4 py-2 border border-border bg-background rounded-md text-text focus:ring-primary focus:border-primary outline-none"
               value={formData.note} 
               onChange={handleChange} 
               rows="2"

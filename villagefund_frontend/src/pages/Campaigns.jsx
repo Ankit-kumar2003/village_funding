@@ -44,7 +44,7 @@ export default function Campaigns() {
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 filter === status 
                   ? 'bg-secondary text-white' 
-                  : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                  : 'bg-surface text-text-muted border border-border hover:bg-background'
               }`}
             >
               {filterLabels[status]}
@@ -58,9 +58,9 @@ export default function Campaigns() {
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
         </div>
       ) : campaigns.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-lg shadow-sm border border-gray-100">
-          <h3 className="text-xl font-heading text-gray-500">{t('campaignNoneFound')}</h3>
-          <p className="text-gray-400 mt-2">{t('campaignNoneFoundDesc')}</p>
+        <div className="text-center py-16 bg-surface rounded-lg shadow-sm border border-border">
+          <h3 className="text-xl font-heading text-text-muted">{t('campaignNoneFound')}</h3>
+          <p className="text-text-muted opacity-80 mt-2">{t('campaignNoneFoundDesc')}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

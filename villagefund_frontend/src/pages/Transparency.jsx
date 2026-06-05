@@ -80,7 +80,7 @@ export default function Transparency() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-12 text-center max-w-3xl mx-auto">
         <h1 className="text-4xl font-heading font-bold text-primary mb-4">{t('transparencyTitle')}</h1>
-        <p className="text-gray-600 text-lg">
+        <p className="text-text-muted text-lg">
           {t('transparencyDesc')}
         </p>
       </div>
@@ -92,16 +92,16 @@ export default function Transparency() {
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-100 text-center">
-              <p className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">{t('totalRaisedLabel')}</p>
-              <h2 className="text-4xl font-bold text-green-600 font-heading"><IndianCurrency amount={totalRaised || 140000} /></h2>
+            <div className="bg-surface p-8 rounded-lg shadow-sm border border-border text-center">
+              <p className="text-sm font-bold text-text-muted uppercase tracking-wider mb-2">{t('totalRaisedLabel')}</p>
+              <h2 className="text-4xl font-bold text-green-600 dark:text-green-400 font-heading"><IndianCurrency amount={totalRaised || 140000} /></h2>
             </div>
-            <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-100 text-center">
-              <p className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">{t('totalSpentLabel')}</p>
-              <h2 className="text-4xl font-bold text-red-600 font-heading"><IndianCurrency amount={totalSpent || 45000} /></h2>
+            <div className="bg-surface p-8 rounded-lg shadow-sm border border-border text-center">
+              <p className="text-sm font-bold text-text-muted uppercase tracking-wider mb-2">{t('totalSpentLabel')}</p>
+              <h2 className="text-4xl font-bold text-red-600 dark:text-red-400 font-heading"><IndianCurrency amount={totalSpent || 45000} /></h2>
             </div>
-            <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-100 text-center">
-              <p className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">{t('villageReserve')}</p>
+            <div className="bg-surface p-8 rounded-lg shadow-sm border border-border text-center">
+              <p className="text-sm font-bold text-text-muted uppercase tracking-wider mb-2">{t('villageReserve')}</p>
               <h2 className="text-4xl font-bold text-secondary font-heading"><IndianCurrency amount={remainingReserve || 95000} /></h2>
             </div>
           </div>
@@ -186,30 +186,30 @@ export default function Transparency() {
           </div>
 
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-12">
-            <div className="px-6 py-5 border-b border-gray-100 bg-gray-50">
+          <div className="bg-surface rounded-lg shadow-sm border border-border overflow-hidden mb-12">
+            <div className="px-6 py-5 border-b border-border bg-background">
               <h2 className="text-2xl font-bold font-heading text-text">{t('approvedExpensesTitle')}</h2>
             </div>
             
             {expenses.filter(e => e.approval_status === 'APPROVED').length === 0 ? (
-              <div className="p-12 text-center text-gray-500">{t('noExpensesApproved')}</div>
+              <div className="p-12 text-center text-text-muted">{t('noExpensesApproved')}</div>
             ) : (
               <div className="overflow-x-auto w-full">
                 <table className="w-full text-left border-collapse min-w-[600px]">
                   <thead>
-                    <tr className="bg-white text-gray-500 text-xs uppercase tracking-wider border-b border-gray-100">
+                    <tr className="bg-background text-text-muted text-xs uppercase tracking-wider border-b border-border">
                       <th className="p-4 font-medium">{t('colDate')}</th>
                       <th className="p-4 font-medium">{t('colExpenseDetails')}</th>
                       <th className="p-4 font-medium text-right">{t('colAmount')}</th>
                     </tr>
                   </thead>
-                  <tbody className="text-sm text-gray-700">
+                  <tbody className="text-sm text-text">
                     {expenses.filter(e => e.approval_status === 'APPROVED').map((exp) => (
-                      <tr key={exp.id} className="border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors">
-                        <td className="p-4 whitespace-nowrap">{new Date(exp.posted_at).toLocaleDateString()}</td>
+                      <tr key={exp.id} className="border-b border-border last:border-0 hover:bg-background/40 transition-colors">
+                        <td className="p-4 whitespace-nowrap text-text-muted">{new Date(exp.posted_at).toLocaleDateString()}</td>
                         <td className="p-4">
                           <div className="font-bold text-text">{exp.description}</div>
-                          <div className="text-xs text-gray-500 mt-1">{t('forCampaign')}: {exp.campaign_title || exp.campaign.substring(0,8)}</div>
+                          <div className="text-xs text-text-muted mt-1">{t('forCampaign')}: {exp.campaign_title || exp.campaign.substring(0,8)}</div>
                           {exp.requires_multi_sig && (
                             <div className="mt-1 flex items-center text-xs text-secondary font-bold">
                               <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -219,13 +219,13 @@ export default function Transparency() {
                             </div>
                           )}
                         </td>
-                        <td className="p-4">{exp.vendor_name}</td>
+                        <td className="p-4 text-text-muted">{exp.vendor_name}</td>
                         <td className="p-4">
-                          <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-bold">
+                          <span className="bg-background text-text-muted border border-border px-2 py-1 rounded text-xs font-bold">
                             {exp.category}
                           </span>
                         </td>
-                        <td className="p-4 text-right font-bold text-red-600">
+                        <td className="p-4 text-right font-bold text-red-650">
                           -<IndianCurrency amount={exp.amount} />
                         </td>
                       </tr>

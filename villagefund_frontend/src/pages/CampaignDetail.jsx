@@ -47,8 +47,8 @@ export default function CampaignDetail() {
         
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-            <div className="h-64 md:h-96 bg-gray-200 relative">
+          <div className="bg-surface rounded-lg shadow-sm border border-border overflow-hidden">
+            <div className="h-64 md:h-96 bg-background relative">
               {campaign.cover_image ? (
                 <img src={campaign.cover_image} alt={campaign.title} className="w-full h-full object-cover" />
               ) : (
@@ -66,7 +66,7 @@ export default function CampaignDetail() {
                 </span>
               </div>
               
-              <div className="prose max-w-none text-gray-700 leading-relaxed">
+              <div className="prose max-w-none text-text leading-relaxed">
                 <p className="whitespace-pre-wrap">{campaign.description}</p>
               </div>
             </div>
@@ -74,12 +74,12 @@ export default function CampaignDetail() {
 
           {/* Budget Breakdown */}
           {campaign.budget_items && campaign.budget_items.length > 0 && (
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h2 className="text-2xl font-bold font-heading mb-6 border-b pb-4 text-text">{t('budgetBreakdown')}</h2>
+            <div className="bg-surface p-6 rounded-lg shadow-sm border border-border">
+              <h2 className="text-2xl font-bold font-heading mb-6 border-b border-border pb-4 text-text">{t('budgetBreakdown')}</h2>
               <div className="space-y-4">
                 {campaign.budget_items.map(item => (
-                  <div key={item.id} className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
-                    <span className="text-gray-700 font-medium">{item.item_name}</span>
+                  <div key={item.id} className="flex justify-between items-center py-2 border-b border-border last:border-0">
+                    <span className="text-text font-medium">{item.item_name}</span>
                     <span className="font-bold text-text"><IndianCurrency amount={item.estimated_cost} /></span>
                   </div>
                 ))}
@@ -88,17 +88,17 @@ export default function CampaignDetail() {
           )}
 
           {/* Updates */}
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <h2 className="text-2xl font-bold font-heading mb-6 border-b pb-4 text-text">{t('campaignUpdates')}</h2>
+          <div className="bg-surface p-6 rounded-lg shadow-sm border border-border">
+            <h2 className="text-2xl font-bold font-heading mb-6 border-b border-border pb-4 text-text">{t('campaignUpdates')}</h2>
             {updates.length === 0 ? (
-              <p className="text-gray-500 italic">{t('noUpdatesYet')}</p>
+              <p className="text-text-muted italic">{t('noUpdatesYet')}</p>
             ) : (
               <div className="space-y-8">
                 {updates.map(update => (
                   <div key={update.id} className="border-l-4 border-primary pl-5 py-1">
                     <h4 className="font-bold text-xl text-text mb-1">{update.title}</h4>
-                    <p className="text-sm text-gray-500 mb-4 font-medium">{new Date(update.posted_at).toLocaleDateString()}</p>
-                    <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">{update.content}</p>
+                    <p className="text-sm text-text-muted mb-4 font-medium">{new Date(update.posted_at).toLocaleDateString()}</p>
+                    <p className="text-text whitespace-pre-wrap leading-relaxed">{update.content}</p>
                   </div>
                 ))}
               </div>
@@ -109,20 +109,20 @@ export default function CampaignDetail() {
         {/* Sidebar */}
         <div className="lg:col-span-1">
           <div className="sticky top-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <div className="bg-surface p-6 rounded-lg shadow-sm border border-border">
               <div className="mb-6">
                 <div className="text-4xl font-bold text-text mb-2 tracking-tight">
                   <IndianCurrency amount={campaign.raised_amount} />
                 </div>
-                <div className="text-gray-500 mb-5 text-sm">
+                <div className="text-text-muted mb-5 text-sm">
                   {t('raisedOf')} <span className="font-bold text-text"><IndianCurrency amount={campaign.goal_amount} /></span> {t('goal').toLowerCase()}
                 </div>
                 <ProgressBar percentage={campaign.progress_percentage} />
               </div>
               
-              <div className="flex items-center justify-between text-sm text-gray-600 mb-6 bg-gray-50 p-3 rounded-md border border-gray-100">
+              <div className="flex items-center justify-between text-sm text-text-muted mb-6 bg-background p-3 rounded-md border border-border">
                 <span className={`font-bold px-2 py-1 rounded text-xs ${
-                  campaign.status === 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-800'
+                  campaign.status === 'ACTIVE' ? 'bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400 border border-green-200/20' : 'bg-background text-text-muted border border-border'
                 }`}>
                   {campaign.status}
                 </span>
@@ -132,10 +132,10 @@ export default function CampaignDetail() {
               <ContributionForm campaignId={campaign.id} />
             </div>
             
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 mt-6">
-              <h3 className="font-bold font-heading mb-4 text-lg">{t('transparencyInfo')}</h3>
-              <ul className="text-sm space-y-3 text-gray-600">
-                <li className="flex justify-between border-b border-gray-50 pb-2">
+            <div className="bg-surface p-6 rounded-lg shadow-sm border border-border mt-6">
+              <h3 className="font-bold font-heading mb-4 text-lg text-text">{t('transparencyInfo')}</h3>
+              <ul className="text-sm space-y-3 text-text-muted">
+                <li className="flex justify-between border-b border-border pb-2">
                   <span className="font-medium text-text">{t('createdBy')}</span> 
                   <span>{campaign.created_by?.full_name || t('villageCommittee')}</span>
                 </li>

@@ -37,10 +37,10 @@ export default function Login() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-background px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-xl p-8 border border-gray-100">
+      <div className="max-w-md w-full bg-surface rounded-lg shadow-xl p-8 border border-border">
         <h2 className="text-3xl font-heading font-bold text-center text-primary mb-8">{t('loginTitle')}</h2>
         
-        {error && <div className="bg-red-50 text-red-500 p-3 rounded mb-4 text-sm text-center">{error}</div>}
+        {error && <div className="bg-red-50 dark:bg-red-950/30 text-red-500 p-3 rounded mb-4 text-sm text-center">{error}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -48,7 +48,7 @@ export default function Login() {
             <input 
               type="text" 
               name="phone_number" 
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary outline-none"
+              className="w-full px-4 py-2 border border-border bg-background rounded-md text-text focus:ring-primary focus:border-primary outline-none"
               value={formData.phone_number} 
               onChange={handleChange} 
               required 
@@ -59,7 +59,7 @@ export default function Login() {
             <input 
               type="password" 
               name="password" 
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary outline-none"
+              className="w-full px-4 py-2 border border-border bg-background rounded-md text-text focus:ring-primary focus:border-primary outline-none"
               value={formData.password} 
               onChange={handleChange} 
               required 
@@ -71,7 +71,7 @@ export default function Login() {
         </form>
 
         <div className="mt-6 flex items-center justify-center">
-          <span className="text-gray-500 text-sm">{t('loginOr')}</span>
+          <span className="text-text-muted text-sm">{t('loginOr')}</span>
         </div>
 
         <div className="mt-6 flex justify-center">
@@ -81,7 +81,7 @@ export default function Login() {
           />
         </div>
 
-        <p className="mt-6 text-center text-sm text-gray-600">
+        <p className="mt-6 text-center text-sm text-text-muted">
           {t('loginNoAccount')} <Link to="/register" className="text-secondary font-medium hover:underline">{t('loginRegisterLink')}</Link>
         </p>
       </div>

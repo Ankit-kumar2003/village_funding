@@ -31,10 +31,10 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-8 border-b pb-6">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-border pb-6">
         <div>
           <h1 className="text-3xl font-heading font-bold text-primary">{t('dashboardTitle')}</h1>
-          <p className="text-gray-600 mt-2">{t('dashboardWelcome')} {user?.full_name}</p>
+          <p className="text-text-muted mt-2">{t('dashboardWelcome')} {user?.full_name}</p>
         </div>
         
         {['TREASURER', 'SUPER_ADMIN'].includes(user?.role) && (
@@ -48,45 +48,45 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center space-x-4">
-          <div className="bg-green-100 p-4 rounded-full text-secondary">
+        <div className="bg-surface p-6 rounded-lg shadow-sm border border-border flex items-center space-x-4">
+          <div className="bg-green-100 dark:bg-green-950/30 p-4 rounded-full text-secondary">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <p className="text-sm text-gray-500 font-medium">{t('dashboardTotalContributed')}</p>
+            <p className="text-sm text-text-muted font-medium">{t('dashboardTotalContributed')}</p>
             <p className="text-2xl font-bold text-text"><IndianCurrency amount={totalContributed} /></p>
           </div>
         </div>
         
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center space-x-4">
-          <div className="bg-orange-100 p-4 rounded-full text-primary">
+        <div className="bg-surface p-6 rounded-lg shadow-sm border border-border flex items-center space-x-4">
+          <div className="bg-orange-100 dark:bg-orange-950/30 p-4 rounded-full text-primary">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           </div>
           <div>
-            <p className="text-sm text-gray-500 font-medium">{t('dashboardActiveStreak')}</p>
+            <p className="text-sm text-text-muted font-medium">{t('dashboardActiveStreak')}</p>
             <p className="text-2xl font-bold text-text">3 {t('dashboardMonths')}</p>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center space-x-4">
-          <div className="bg-blue-100 p-4 rounded-full text-blue-600">
+        <div className="bg-surface p-6 rounded-lg shadow-sm border border-border flex items-center space-x-4">
+          <div className="bg-blue-100 dark:bg-blue-950/30 p-4 rounded-full text-blue-600 dark:text-blue-400">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
             </svg>
           </div>
           <div>
-            <p className="text-sm text-gray-500 font-medium">{t('dashboardBadgesEarned')}</p>
+            <p className="text-sm text-text-muted font-medium">{t('dashboardBadgesEarned')}</p>
             <p className="text-2xl font-bold text-text">2</p>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100">
+      <div className="bg-surface rounded-lg shadow-sm border border-border overflow-hidden">
+        <div className="px-6 py-4 border-b border-border">
           <h2 className="text-xl font-bold font-heading text-text">{t('dashboardContribHistory')}</h2>
         </div>
         
@@ -101,7 +101,7 @@ export default function Dashboard() {
           <div className="overflow-x-auto w-full">
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
-                <tr className="bg-gray-50 text-gray-600 text-sm border-b border-gray-100">
+                <tr className="bg-background text-text-muted text-sm border-b border-border">
                   <th className="p-4 font-medium">{t('dashboardColDate')}</th>
                   <th className="p-4 font-medium">{t('dashboardColCampaignId')}</th>
                   <th className="p-4 font-medium">{t('dashboardColAmount')}</th>
@@ -109,22 +109,22 @@ export default function Dashboard() {
                   <th className="p-4 font-medium">{t('dashboardColStatus')}</th>
                 </tr>
               </thead>
-              <tbody className="text-sm text-gray-700">
+              <tbody className="text-sm text-text">
                 {contributions.map((c) => (
-                  <tr key={c.id} className="border-b border-gray-50 last:border-0 hover:bg-gray-50">
-                    <td className="p-4 whitespace-nowrap">{new Date(c.submitted_at).toLocaleDateString()}</td>
+                  <tr key={c.id} className="border-b border-border last:border-0 hover:bg-background/40 transition-colors">
+                    <td className="p-4 whitespace-nowrap text-text-muted">{new Date(c.submitted_at).toLocaleDateString()}</td>
                     <td className="p-4 text-primary">
                       <Link to={`/campaigns/${c.campaign}`} className="hover:underline">
                         {c.campaign.substring(0,8)}...
                       </Link>
                     </td>
                     <td className="p-4 font-bold text-text"><IndianCurrency amount={c.amount} /></td>
-                    <td className="p-4 font-mono text-xs">{c.utr_number}</td>
+                    <td className="p-4 font-mono text-xs text-text-muted">{c.utr_number}</td>
                     <td className="p-4">
                       <span className={`px-2 py-1 rounded text-xs font-bold ${
-                        c.status === 'APPROVED' ? 'bg-green-100 text-green-800' :
-                        c.status === 'PENDING' ? 'bg-orange-100 text-orange-800' :
-                        'bg-red-100 text-red-800'
+                        c.status === 'APPROVED' ? 'bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400' :
+                        c.status === 'PENDING' ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400' :
+                        'bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-400'
                       }`}>
                         {c.status}
                       </span>
