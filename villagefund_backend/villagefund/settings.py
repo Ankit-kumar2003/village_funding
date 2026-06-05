@@ -139,7 +139,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 # Email Settings (Gmail)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -181,12 +180,56 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Cloudinary Configuration
-CLOUDINARY_STORAGE = {
-    'CLOUDINARY_URL': config('CLOUDINARY_URL', default='')
-}
+CLOUDINARY_URL = config('CLOUDINARY_URL', default='')
+if '**********' in CLOUDINARY_URL:
+    CLOUDINARY_URL = ''
 
-if config('CLOUDINARY_URL', default=''):
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+CLOUDINARY_CLOUD_NAME = config('CLOUDINARY_CLOUD_NAME', default=config('CLOUD_NAME', default=''))
+CLOUDINARY_API_KEY = config('CLOUDINARY_API_KEY', default=config('API_KEY', default=''))
+CLOUDINARY_API_SECRET = config('CLOUDINARY_API_SECRET', default=config('API_SECRET', default=''))
+
+# Masked check for individual keys
+if '**********' in CLOUDINARY_CLOUD_NAME: CLOUDINARY_CLOUD_NAME = ''
+if '**********' in CLOUDINARY_API_KEY: CLOUDINARY_API_KEY = ''
+if '**********' in CLOUDINARY_API_SECRET: CLOUDINARY_API_SECRET = ''
+
+has_cloudinary = False
+
+if CLOUDINARY_URL:
+    os.environ['CLOUDINARY_URL'] = CLOUDINARY_URL
+    CLOUDINARY_STORAGE = {
+        'CLOUDINARY_URL': CLOUDINARY_URL
+    }
+    has_cloudinary = True
+elif CLOUDINARY_CLOUD_NAME and CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET:
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': CLOUDINARY_CLOUD_NAME,
+        'API_KEY': CLOUDINARY_API_KEY,
+        'API_SECRET': CLOUDINARY_API_SECRET,
+    }
+    os.environ['CLOUDINARY_CLOUD_NAME'] = CLOUDINARY_CLOUD_NAME
+    os.environ['CLOUDINARY_API_KEY'] = CLOUDINARY_API_KEY
+    os.environ['CLOUDINARY_API_SECRET'] = CLOUDINARY_API_SECRET
+    has_cloudinary = True
+
+if has_cloudinary:
+    STORAGES = {
+        "default": {
+            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
 
 # Platform Config
 VILLAGE_NAME = "Mahuaa"
