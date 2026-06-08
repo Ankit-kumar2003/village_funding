@@ -7,3 +7,4 @@ class GalleryPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = GalleryPhoto
         fields = '__all__'
+        read_only_fields = ('uploaded_by',)
