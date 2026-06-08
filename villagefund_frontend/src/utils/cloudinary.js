@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const CLOUD_NAME = 'dkawomkxk';
-const UPLOAD_PRESET = 'ml_default'; // Default unsigned preset name in Cloudinary
+const UPLOAD_PRESET = 'village_preset'; // Unsigned preset name in Cloudinary
 
 /**
  * Uploads a file directly to Cloudinary using their REST API
