@@ -31,6 +31,7 @@ class SponsorshipSerializer(serializers.ModelSerializer):
 
 class CampaignListSerializer(serializers.ModelSerializer):
     progress_percentage = serializers.SerializerMethodField()
+    cover_image = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = Campaign
@@ -47,6 +48,8 @@ class CampaignDetailSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
     treasurer = UserSerializer(read_only=True)
     progress_percentage = serializers.SerializerMethodField()
+    cover_image = serializers.CharField(required=False, allow_null=True)
+    campaign_qr_image = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = Campaign
