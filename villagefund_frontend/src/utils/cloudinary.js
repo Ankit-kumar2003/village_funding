@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const CLOUD_NAME = 'dkawomkxk';
+const CLOUD_NAME = 'dieykm68z';
 const UPLOAD_PRESET = 'village_preset'; // Unsigned preset name in Cloudinary
 
 /**
