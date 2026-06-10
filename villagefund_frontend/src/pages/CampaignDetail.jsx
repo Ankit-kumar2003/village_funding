@@ -129,7 +129,7 @@ export default function CampaignDetail() {
                 <span className="font-medium">{t('ends')}: {new Date(campaign.end_date).toLocaleDateString()}</span>
               </div>
 
-              <ContributionForm campaignId={campaign.id} />
+              <ContributionForm campaign={campaign} campaignId={campaign.id} />
             </div>
             
             <div className="bg-surface p-6 rounded-lg shadow-sm border border-border mt-6">

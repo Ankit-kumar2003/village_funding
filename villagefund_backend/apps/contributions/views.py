@@ -59,6 +59,16 @@ class ContributionViewSet(viewsets.ModelViewSet):
         
         contribution = serializer.save(contributor=self.request.user)
         
+        # If payment method is manual (Direct UPI / offline bank transfer)
+        payment_method = request.data.get('payment_method', 'CASHFREE')
+        if payment_method in ['MANUAL_UPI', 'MANUAL_BANK']:
+            # Send confirmation email asynchronously
+            threading.Thread(target=send_contribution_received_email, args=(self.request.user, contribution)).start()
+            
+            headers = self.get_success_headers(serializer.data)
+            response_serializer = self.get_serializer(contribution)
+            return Response(response_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        
         # Prepare Cashfree Order
         order_id = f"VF_ORD_{contribution.id.hex[:16]}"
         amount = contribution.amount

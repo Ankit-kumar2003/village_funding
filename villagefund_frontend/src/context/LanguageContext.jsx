@@ -206,6 +206,16 @@ const translations = {
     redirectingToCheckout: 'Redirecting to Checkout...',
     paymentSessionError: 'Payment session could not be initialized.',
     paymentInitError: 'Failed to initiate payment. Please check your details.',
+    paymentMethodLabel: 'Select Payment Method',
+    payOnline: 'Online Payment (Cashfree)',
+    payManual: 'Direct UPI Transfer (Manual UTR Verification)',
+    upiInstructions: 'Scan the QR code or copy the UPI ID below to make the transfer from any UPI app (GPay, PhonePe, Paytm), then paste your 12-digit UTR/Transaction ID below to submit.',
+    upiIdLabel: 'Campaign UPI ID',
+    copySuccess: 'Copied to clipboard!',
+    utrLabel: 'UTR / Transaction ID (12 digits)',
+    submitManualPay: 'Submit Manual Contribution',
+    submittingManualPay: 'Submitting Request...',
+    manualSuccessMsg: 'Contribution request submitted successfully! Once the Treasurer verifies the transaction in the bank statement, it will be approved.',
 
     // Leaderboard
     leaderboardTitle: 'Village Honor Roll',
@@ -561,6 +571,16 @@ const translations = {
     redirectingToCheckout: 'चेकआउट पर भेजा जा रहा है...',
     paymentSessionError: 'भुगतान सत्र प्रारंभ नहीं हो सका।',
     paymentInitError: 'भुगतान शुरू करने में विफल। कृपया अपने विवरण जांचें।',
+    paymentMethodLabel: 'भुगतान विधि चुनें',
+    payOnline: 'ऑनलाइन भुगतान (Cashfree)',
+    payManual: 'सीधा UPI ट्रांसफर (मैनुअल UTR सत्यापन)',
+    upiInstructions: 'किसी भी UPI ऐप (GPay, PhonePe, Paytm) से ट्रांसफर करने के लिए नीचे दिए गए QR कोड को स्कैन करें या UPI आईडी को कॉपी करें, फिर सबमिट करने के लिए नीचे अपना 12-अंकीय UTR/ट्रांजैक्शन आईडी दर्ज करें।',
+    upiIdLabel: 'अभियान UPI आईडी',
+    copySuccess: 'क्लिपबोर्ड पर कॉपी किया गया!',
+    utrLabel: 'UTR / ट्रांजैक्शन आईडी (12 अंक)',
+    submitManualPay: 'मैनुअल योगदान सबमिट करें',
+    submittingManualPay: 'अनुरोध सबमिट किया जा रहा है...',
+    manualSuccessMsg: 'योगदान अनुरोध सफलतापूर्वक सबमिट किया गया! जैसे ही कोषाध्यक्ष बैंक स्टेटमेंट में लेनदेन का सत्यापन करेंगे, इसे स्वीकृत कर दिया जाएगा।',
 
     // Leaderboard
     leaderboardTitle: 'ग्राम सम्मान पट्ट',
