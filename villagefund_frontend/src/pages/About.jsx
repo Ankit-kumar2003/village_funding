@@ -554,7 +554,7 @@ export default function About() {
                   <span>GitHub</span>
                 </a>
                 <a
-                  href="https://linkedin.com/in/ankit-kumar"
+                  href="https://www.linkedin.com/in/ankit--kumaar/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center space-x-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl font-semibold text-sm hover:bg-blue-700 transition-colors shadow-md"
