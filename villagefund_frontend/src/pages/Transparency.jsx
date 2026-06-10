@@ -67,12 +67,21 @@ function downloadCSV(contributors, campaignName) {
 
   const rows = contributors.map((c) => {
     const dt = new Date(c.submitted_at);
+    // Use ISO-style fixed date format (DD/MM/YYYY) to avoid locale-comma issues in CSV
+    const day   = String(dt.getDate()).padStart(2, '0');
+    const month = String(dt.getMonth() + 1).padStart(2, '0');
+    const year  = dt.getFullYear();
+    const hours   = String(dt.getHours()).padStart(2, '0');
+    const minutes = String(dt.getMinutes()).padStart(2, '0');
+    const seconds = String(dt.getSeconds()).padStart(2, '0');
+    const dateStr = `${day}/${month}/${year}`;
+    const timeStr = `${hours}:${minutes}:${seconds}`;
     return [
       `"${c.contributor_name || ''}"`,
       `"${c.contributor_email || ''}"`,
       parseFloat(c.amount).toFixed(2),
-      dt.toLocaleDateString('en-IN'),
-      dt.toLocaleTimeString('en-IN'),
+      `"${dateStr}"`,
+      `"${timeStr}"`,
       c.payment_method || '',
       `"${c.payment_reference || ''}"`,
       `"${c.campaign_title || ''}"`,
