@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { createCampaign } from '../../api/campaigns';
+import { useState, useEffect } from 'react';
+import { createCampaign, updateCampaign } from '../../api/campaigns';
 import { uploadToCloudinary } from '../../utils/cloudinary';
 import { useLanguage } from '../../context/LanguageContext';
 import { Image, Upload, AlertCircle, CheckCircle2 } from 'lucide-react';
 
-export default function CampaignForm({ onCampaignAdded }) {
+export default function CampaignForm({ onCampaignAdded, campaignToEdit, onCancel }) {
   const { language } = useLanguage();
   const [formData, setFormData] = useState({
     title: '',
@@ -23,6 +23,36 @@ export default function CampaignForm({ onCampaignAdded }) {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (campaignToEdit) {
+      setFormData({
+        title: campaignToEdit.title || '',
+        description: campaignToEdit.description || '',
+        category: campaignToEdit.category || 'INFRASTRUCTURE',
+        goal_amount: campaignToEdit.goal_amount || '',
+        start_date: campaignToEdit.start_date || '',
+        end_date: campaignToEdit.end_date || '',
+        campaign_upi_id: campaignToEdit.campaign_upi_id || '',
+        cover_image: campaignToEdit.cover_image || '',
+        campaign_qr_image: campaignToEdit.campaign_qr_image || '',
+      });
+    } else {
+      setFormData({
+        title: '',
+        description: '',
+        category: 'INFRASTRUCTURE',
+        goal_amount: '',
+        start_date: '',
+        end_date: '',
+        campaign_upi_id: '',
+        cover_image: '',
+        campaign_qr_image: '',
+      });
+    }
+    setError(null);
+    setMessage(null);
+  }, [campaignToEdit]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -86,32 +116,40 @@ export default function CampaignForm({ onCampaignAdded }) {
         goal_amount: parseFloat(formData.goal_amount),
       };
 
-      await createCampaign(payload);
+      if (campaignToEdit) {
+        await updateCampaign(campaignToEdit.id, payload);
+        setMessage(
+          language === 'en' 
+            ? 'Campaign updated successfully!' 
+            : 'अभियान सफलतापूर्वक अपडेट किया गया!'
+        );
+      } else {
+        await createCampaign(payload);
+        setFormData({
+          title: '',
+          description: '',
+          category: 'INFRASTRUCTURE',
+          goal_amount: '',
+          start_date: '',
+          end_date: '',
+          campaign_upi_id: '',
+          cover_image: '',
+          campaign_qr_image: '',
+        });
+        setMessage(
+          language === 'en' 
+            ? 'Campaign created successfully!' 
+            : 'अभियान सफलतापूर्वक बनाया गया!'
+        );
+      }
       
-      setFormData({
-        title: '',
-        description: '',
-        category: 'INFRASTRUCTURE',
-        goal_amount: '',
-        start_date: '',
-        end_date: '',
-        campaign_upi_id: '',
-        cover_image: '',
-        campaign_qr_image: '',
-      });
-
-      setMessage(
-        language === 'en' 
-          ? 'Campaign created successfully!' 
-          : 'अभियान सफलतापूर्वक बनाया गया!'
-      );
       if (onCampaignAdded) onCampaignAdded();
     } catch (err) {
       console.error(err);
       setError(
         language === 'en'
-          ? 'Failed to create campaign. Please check the fields.'
-          : 'अभियान बनाने में विफल। कृपया फ़ील्ड जांचें।'
+          ? (campaignToEdit ? 'Failed to update campaign. Please check the fields.' : 'Failed to create campaign. Please check the fields.')
+          : (campaignToEdit ? 'अभियान अपडेट करने में विफल। कृपया फ़ील्ड जांचें।' : 'अभियान बनाने में विफल। कृपया फ़ील्ड जांचें।')
       );
     } finally {
       setSubmitting(false);
@@ -122,7 +160,9 @@ export default function CampaignForm({ onCampaignAdded }) {
     <div className="bg-surface p-6 rounded-3xl border border-border shadow-sm text-text transition-colors duration-300">
       <h3 className="text-2xl font-black font-heading mb-6 flex items-center gap-2">
         <Image className="w-6 h-6 text-primary" />
-        {language === 'en' ? 'Launch New Campaign' : 'नया अभियान शुरू करें'}
+        {campaignToEdit 
+          ? (language === 'en' ? 'Edit Campaign' : 'अभियान संपादित करें')
+          : (language === 'en' ? 'Launch New Campaign' : 'नया अभियान शुरू करें')}
       </h3>
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -332,15 +372,30 @@ export default function CampaignForm({ onCampaignAdded }) {
           </div>
         </div>
 
-        <button
-          type="submit"
-          disabled={submitting || uploadingCover || uploadingQr}
-          className="w-full py-3.5 bg-primary hover:bg-orange-600 text-white font-bold rounded-2xl shadow-md transition-colors disabled:opacity-50 text-sm mt-4"
-        >
-          {submitting 
-            ? (language === 'en' ? 'Launching Campaign...' : 'अभियान शुरू किया जा रहा है...') 
-            : (language === 'en' ? 'Launch Campaign' : 'अभियान शुरू करें')}
-        </button>
+        <div className="flex gap-3 mt-4">
+          {campaignToEdit && (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="flex-1 py-3.5 bg-background text-text border border-border hover:bg-surface-hover font-bold rounded-2xl shadow-sm transition-colors text-sm"
+            >
+              {language === 'en' ? 'Cancel' : 'रद्द करें'}
+            </button>
+          )}
+          <button
+            type="submit"
+            disabled={submitting || uploadingCover || uploadingQr}
+            className={`py-3.5 bg-primary hover:bg-orange-600 text-white font-bold rounded-2xl shadow-md transition-colors disabled:opacity-50 text-sm ${campaignToEdit ? 'flex-1' : 'w-full'}`}
+          >
+            {submitting 
+              ? (campaignToEdit 
+                  ? (language === 'en' ? 'Saving Changes...' : 'बदलाव सहेजे जा रहे हैं...')
+                  : (language === 'en' ? 'Launching Campaign...' : 'अभियान शुरू किया जा रहा है...')) 
+              : (campaignToEdit
+                  ? (language === 'en' ? 'Save Changes' : 'बदलाव सहेजें')
+                  : (language === 'en' ? 'Launch Campaign' : 'अभियान शुरू करें'))}
+          </button>
+        </div>
       </form>
     </div>
   );

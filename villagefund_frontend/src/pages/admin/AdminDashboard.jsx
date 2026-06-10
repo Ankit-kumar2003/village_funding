@@ -22,6 +22,7 @@ export default function AdminDashboard() {
   
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(null);
+  const [editingCampaign, setEditingCampaign] = useState(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -48,6 +49,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchData();
+    setEditingCampaign(null);
   }, [activeTab]);
 
   const handleAction = async (id, action) => {
@@ -298,7 +300,14 @@ export default function AdminDashboard() {
       ) : activeTab === 'campaigns' ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
-            <CampaignForm onCampaignAdded={fetchData} />
+            <CampaignForm 
+              onCampaignAdded={() => {
+                fetchData();
+                setEditingCampaign(null);
+              }}
+              campaignToEdit={editingCampaign}
+              onCancel={() => setEditingCampaign(null)}
+            />
           </div>
           <div className="lg:col-span-2">
             <div className="bg-surface rounded-lg shadow-sm border border-border overflow-hidden">
@@ -352,17 +361,29 @@ export default function AdminDashboard() {
                               {camp.status}
                             </span>
                           </td>
-                          <td className="p-4 text-right">
+                          <td className="p-4 text-right space-x-3 whitespace-nowrap">
+                            <button 
+                              onClick={() => {
+                                setEditingCampaign(camp);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                              }}
+                              className="text-primary hover:text-orange-600 font-bold text-xs p-1"
+                              title="Edit Campaign"
+                            >
+                              {language === 'en' ? 'Edit' : 'संपादित करें'}
+                            </button>
                             {user.role === 'SUPER_ADMIN' ? (
                               <button 
                                 onClick={() => handleDeleteCampaign(camp.id)}
-                                className="text-red-650 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-bold text-xs p-1"
+                                className="text-red-650 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-bold text-xs p-1 border-l border-border pl-3"
                                 title="Delete Campaign"
                               >
                                 {language === 'en' ? 'Delete' : 'हटाएं'}
                               </button>
                             ) : (
-                              <span className="text-xs text-text-muted opacity-50">{language === 'en' ? 'Locked' : 'लॉक है'}</span>
+                              <span className="text-xs text-text-muted opacity-50 border-l border-border pl-3" title="Only Super Admin can delete campaigns">
+                                {language === 'en' ? 'Locked' : 'लॉक है'}
+                              </span>
                             )}
                           </td>
                         </tr>
