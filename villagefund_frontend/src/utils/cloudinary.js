@@ -33,3 +33,22 @@ export const uploadToCloudinary = async (file) => {
     );
   }
 };
+
+/**
+ * Injects Cloudinary transformation params into an existing Cloudinary URL.
+ * Works only for res.cloudinary.com URLs — passes through all other URLs unchanged.
+ *
+ * @param {string} url   - The original Cloudinary URL
+ * @param {string} transforms - Transformation string, e.g. "c_fill,g_auto,w_600,h_600,q_auto,f_auto"
+ * @returns {string} - Transformed URL
+ *
+ * Example:
+ *   Input:  https://res.cloudinary.com/dieykm68z/image/upload/v123/sample.jpg
+ *   Output: https://res.cloudinary.com/dieykm68z/image/upload/c_fill,g_auto,w_600,h_600,q_auto,f_auto/v123/sample.jpg
+ */
+export const cloudinaryTransform = (url, transforms = 'c_fill,g_auto,w_600,h_600,q_auto,f_auto') => {
+  if (!url || !url.includes('res.cloudinary.com')) return url;
+  // Insert transformation string right after /upload/
+  return url.replace('/upload/', `/upload/${transforms}/`);
+};
+
