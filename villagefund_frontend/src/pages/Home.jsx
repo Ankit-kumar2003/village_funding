@@ -1,28 +1,50 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCampaigns } from '../api/campaigns';
+import { getPlatformStats } from '../api/transparency';
 import CampaignCard from '../components/campaigns/CampaignCard';
 import { useLanguage } from '../context/LanguageContext';
+
+const formatRaised = (amount) => {
+  if (!amount) return '₹0';
+  if (amount >= 100000) {
+    const val = amount / 100000;
+    return `₹${val % 1 === 0 ? val : val.toFixed(1)}L+`;
+  }
+  if (amount >= 1000) {
+    const val = amount / 1000;
+    return `₹${val % 1 === 0 ? val : val.toFixed(1)}K+`;
+  }
+  return `₹${amount}`;
+};
 
 export default function Home() {
   const { t } = useLanguage();
   const [activeCampaigns, setActiveCampaigns] = useState([]);
+  const [stats, setStats] = useState({
+    total_raised: 0,
+    campaigns_completed: 0,
+    transparency_score: 100
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchRecentCampaigns = async () => {
+    const fetchHomeData = async () => {
       try {
-        const { data } = await getCampaigns({ status: 'ACTIVE' });
-        // Take only the first 3 active campaigns for the homepage
-        const campaignsList = data.results || data;
+        const [campaignsRes, statsRes] = await Promise.all([
+          getCampaigns({ status: 'ACTIVE' }),
+          getPlatformStats()
+        ]);
+        const campaignsList = campaignsRes.data.results || campaignsRes.data;
         setActiveCampaigns(campaignsList.slice(0, 3));
+        setStats(statsRes.data);
       } catch (error) {
-        console.error("Failed to fetch recent campaigns", error);
+        console.error("Failed to fetch homepage data", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchRecentCampaigns();
+    fetchHomeData();
   }, []);
 
   return (
@@ -71,19 +93,25 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="glass-card glass-card-hover rounded-3xl shadow-xl border border-white/20 dark:border-slate-800/40 p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-center max-w-5xl mx-auto md:-mt-24 relative z-10">
             <div>
-              <h3 className="text-4xl font-extrabold text-primary font-heading mb-2">₹1.4L+</h3>
+              <h3 className="text-4xl font-extrabold text-primary font-heading mb-2">
+                {formatRaised(stats.total_raised)}
+              </h3>
               <p className="text-text-muted font-medium">{t('statRaised')}</p>
             </div>
             <div className="hidden md:block w-px bg-white/25 dark:bg-slate-700/50 h-16 mx-auto"></div>
             <div className="md:hidden h-px bg-white/25 dark:bg-slate-700/50 w-full mx-auto"></div>
             <div>
-              <h3 className="text-4xl font-extrabold text-secondary font-heading mb-2">3</h3>
+              <h3 className="text-4xl font-extrabold text-secondary font-heading mb-2">
+                {stats.campaigns_completed}
+              </h3>
               <p className="text-text-muted font-medium">{t('statProjects')}</p>
             </div>
             <div className="hidden md:block w-px bg-white/25 dark:bg-slate-700/50 h-16 mx-auto"></div>
             <div className="md:hidden h-px bg-white/25 dark:bg-slate-700/50 w-full mx-auto"></div>
             <div>
-              <h3 className="text-4xl font-extrabold text-blue-600 dark:text-blue-400 font-heading mb-2">100%</h3>
+              <h3 className="text-4xl font-extrabold text-blue-600 dark:text-blue-400 font-heading mb-2">
+                {stats.transparency_score}%
+              </h3>
               <p className="text-text-muted font-medium">{t('statTransparency')}</p>
             </div>
           </div>

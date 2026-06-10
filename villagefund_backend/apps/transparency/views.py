@@ -17,7 +17,7 @@ class StatsView(views.APIView):
         total_spent = Expense.objects.filter(approval_status='APPROVED').aggregate(total=Sum('amount'))['total'] or 0
         reserve = VillageReserve.objects.first()
         reserve_balance = reserve.balance if reserve else 0
-        campaigns_completed = Campaign.objects.filter(status='COMPLETED').count()
+        campaigns_completed = Campaign.objects.filter(status__in=['FUNDED', 'COMPLETED']).count()
         active_contributors = Contribution.objects.filter(status='APPROVED').values('contributor').distinct().count()
         campaigns_active = Campaign.objects.filter(status='ACTIVE').count()
         
@@ -35,6 +35,7 @@ class StatsView(views.APIView):
             'campaigns_completed': campaigns_completed,
             'campaigns_active': campaigns_active,
             'active_contributors': active_contributors,
+            'transparency_score': transparency_score,
             'health_score': health_score
         })
 
