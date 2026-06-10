@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Contribution, Pledge
-from .serializers import ContributionSerializer, PledgeSerializer
+from .serializers import ContributionSerializer, PledgeSerializer, ContributorExportSerializer
 from apps.users.permissions import IsTreasurer, IsSuperAdmin
 from rest_framework.permissions import IsAuthenticated
 from apps.notifications.emails import send_contribution_received_email, send_contribution_status_email
@@ -192,3 +192,22 @@ class ContributionViewSet(viewsets.ModelViewSet):
             
             return Response({'status': 'Rejected'})
         return Response({'error': 'Cannot reject. Status is not PENDING'}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'], permission_classes=[permissions.AllowAny], url_path='campaign-report')
+    def campaign_report(self, request):
+        """
+        Public transparency endpoint.
+        Returns all APPROVED contributions with full contributor + campaign details.
+        Optionally filtered by ?campaign=<uuid>
+        Used by the Transparency page for both the on-screen table and the Excel download.
+        """
+        qs = Contribution.objects.filter(status='APPROVED').select_related(
+            'contributor', 'campaign'
+        ).order_by('-submitted_at')
+
+        campaign_id = request.query_params.get('campaign')
+        if campaign_id:
+            qs = qs.filter(campaign__id=campaign_id)
+
+        serializer = ContributorExportSerializer(qs, many=True)
+        return Response(serializer.data)

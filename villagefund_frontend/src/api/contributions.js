@@ -5,3 +5,6 @@ export const getUserContributions = () => api.get('contributions/');
 export const getAllContributions = (params) => api.get('contributions/', { params });
 export const approveContribution = (id) => api.post(`contributions/${id}/approve/`);
 export const rejectContribution = (id) => api.post(`contributions/${id}/reject/`);
+// Public transparency report – returns all APPROVED contributions with full details
+export const getCampaignReport = (params) => api.get('contributions/campaign-report/', { params });
+
