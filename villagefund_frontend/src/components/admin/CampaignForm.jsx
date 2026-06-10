@@ -15,9 +15,11 @@ export default function CampaignForm({ onCampaignAdded }) {
     end_date: '',
     campaign_upi_id: '',
     cover_image: '',
+    campaign_qr_image: '',
   });
 
-  const [uploading, setUploading] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const [uploadingQr, setUploadingQr] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
@@ -26,11 +28,11 @@ export default function CampaignForm({ onCampaignAdded }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleImageUpload = async (e) => {
+  const handleCoverUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setUploading(true);
+    setUploadingCover(true);
     setError(null);
     setMessage(null);
 
@@ -45,7 +47,30 @@ export default function CampaignForm({ onCampaignAdded }) {
     } catch (err) {
       setError(err.message || 'Image upload failed.');
     } finally {
-      setUploading(false);
+      setUploadingCover(false);
+    }
+  };
+
+  const handleQrUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploadingQr(true);
+    setError(null);
+    setMessage(null);
+
+    try {
+      const url = await uploadToCloudinary(file);
+      setFormData((prev) => ({ ...prev, campaign_qr_image: url }));
+      setMessage(
+        language === 'en' 
+          ? 'UPI QR Code uploaded successfully to Cloudinary!' 
+          : 'यूपीआई क्यूआर कोड क्लाउडिनरी पर सफलतापूर्वक अपलोड हो गया!'
+      );
+    } catch (err) {
+      setError(err.message || 'QR Image upload failed.');
+    } finally {
+      setUploadingQr(false);
     }
   };
 
@@ -72,6 +97,7 @@ export default function CampaignForm({ onCampaignAdded }) {
         end_date: '',
         campaign_upi_id: '',
         cover_image: '',
+        campaign_qr_image: '',
       });
 
       setMessage(
@@ -226,48 +252,90 @@ export default function CampaignForm({ onCampaignAdded }) {
           </div>
         </div>
 
-        <div>
-          <label className="block text-xs font-bold text-text-muted uppercase mb-1.5">
-            {language === 'en' ? 'Campaign Cover Image' : 'अभियान की कवर इमेज'}
-          </label>
-          
-          <div className="flex flex-col sm:flex-row items-center gap-4 p-4 border border-dashed border-border rounded-2xl bg-background/30">
-            <label className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-primary hover:bg-orange-600 text-white rounded-xl text-xs font-bold transition-all shadow-sm">
-              <Upload className="w-4 h-4" />
-              {uploading ? (language === 'en' ? 'Uploading...' : 'अपलोड हो रहा है...') : (language === 'en' ? 'Choose Image' : 'इमेज चुनें')}
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                disabled={uploading}
-                className="hidden"
-              />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Cover Image Upload */}
+          <div>
+            <label className="block text-xs font-bold text-text-muted uppercase mb-1.5">
+              {language === 'en' ? 'Campaign Cover Image' : 'अभियान की कवर इमेज'}
             </label>
             
-            <div className="text-[10px] text-text-muted font-bold uppercase tracking-wider text-center sm:text-left">
-              {formData.cover_image ? (
-                <span className="text-green-500 font-extrabold">{language === 'en' ? 'Cloudinary Hosted URL ready!' : 'क्लाउडिनरी होस्टेड URL तैयार है!'}</span>
-              ) : (
-                language === 'en' ? 'Upload files directly to Cloudinary (PNG/JPG)' : 'फ़ाइलें सीधे क्लाउडिनरी पर अपलोड करें (PNG/JPG)'
-              )}
+            <div className="flex flex-col sm:flex-row items-center gap-4 p-4 border border-dashed border-border rounded-2xl bg-background/30">
+              <label className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-primary hover:bg-orange-600 text-white rounded-xl text-xs font-bold transition-all shadow-sm">
+                <Upload className="w-4 h-4" />
+                {uploadingCover ? (language === 'en' ? 'Uploading...' : 'अपलोड हो रहा है...') : (language === 'en' ? 'Choose Image' : 'इमेज चुनें')}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleCoverUpload}
+                  disabled={uploadingCover}
+                  className="hidden"
+                />
+              </label>
+              
+              <div className="text-[10px] text-text-muted font-bold uppercase tracking-wider text-center sm:text-left">
+                {formData.cover_image ? (
+                  <span className="text-green-500 font-extrabold">{language === 'en' ? 'Cover ready!' : 'कवर तैयार है!'}</span>
+                ) : (
+                  language === 'en' ? 'PNG/JPG' : 'PNG/JPG'
+                )}
+              </div>
             </div>
+
+            {formData.cover_image && (
+              <div className="mt-3 relative w-full h-32 rounded-2xl overflow-hidden border border-border bg-background">
+                <img
+                  src={formData.cover_image}
+                  alt="Cover Preview"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
           </div>
 
-          {formData.cover_image && (
-            <div className="mt-3 relative w-full h-40 rounded-2xl overflow-hidden border border-border bg-background">
-              <img
-                src={formData.cover_image}
-                alt="Upload Preview"
-                className="w-full h-full object-cover"
-              />
+          {/* UPI QR Code Image Upload */}
+          <div>
+            <label className="block text-xs font-bold text-text-muted uppercase mb-1.5">
+              {language === 'en' ? 'UPI QR Code Image' : 'यूपीआई क्यूआर कोड इमेज'}
+            </label>
+            
+            <div className="flex flex-col sm:flex-row items-center gap-4 p-4 border border-dashed border-border rounded-2xl bg-background/30">
+              <label className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-primary hover:bg-orange-600 text-white rounded-xl text-xs font-bold transition-all shadow-sm">
+                <Upload className="w-4 h-4" />
+                {uploadingQr ? (language === 'en' ? 'Uploading...' : 'अपलोड हो रहा है...') : (language === 'en' ? 'Choose Image' : 'इमेज चुनें')}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleQrUpload}
+                  disabled={uploadingQr}
+                  className="hidden"
+                />
+              </label>
+              
+              <div className="text-[10px] text-text-muted font-bold uppercase tracking-wider text-center sm:text-left">
+                {formData.campaign_qr_image ? (
+                  <span className="text-green-500 font-extrabold">{language === 'en' ? 'QR Code ready!' : 'क्यूआर तैयार है!'}</span>
+                ) : (
+                  language === 'en' ? 'PNG/JPG' : 'PNG/JPG'
+                )}
+              </div>
             </div>
-          )}
+
+            {formData.campaign_qr_image && (
+              <div className="mt-3 relative w-full h-32 rounded-2xl overflow-hidden border border-border bg-background">
+                <img
+                  src={formData.campaign_qr_image}
+                  alt="QR Preview"
+                  className="w-full h-full object-contain p-2"
+                />
+              </div>
+            )}
+          </div>
         </div>
 
         <button
           type="submit"
-          disabled={submitting || uploading}
-          className="w-full py-3 bg-primary hover:bg-orange-600 text-white font-bold rounded-2xl shadow-md transition-colors disabled:opacity-50 text-sm mt-4"
+          disabled={submitting || uploadingCover || uploadingQr}
+          className="w-full py-3.5 bg-primary hover:bg-orange-600 text-white font-bold rounded-2xl shadow-md transition-colors disabled:opacity-50 text-sm mt-4"
         >
           {submitting 
             ? (language === 'en' ? 'Launching Campaign...' : 'अभियान शुरू किया जा रहा है...') 
