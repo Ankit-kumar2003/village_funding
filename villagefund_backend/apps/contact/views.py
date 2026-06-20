@@ -123,7 +123,7 @@ Please keep your ticket number handy for any follow-up.
 </html>
 """
 
-    logger.info(f"Attempting to send user confirmation email. SMTP Host: {settings.EMAIL_HOST}, Port: {settings.EMAIL_PORT}, User: {settings.EMAIL_HOST_USER}, From: {settings.DEFAULT_FROM_EMAIL}, To: {msg.email}")
+    print(f"[DEBUG EMAIL] User Confirmation Email Attempt:\n  Host: {settings.EMAIL_HOST}\n  Port: {settings.EMAIL_PORT}\n  User: {settings.EMAIL_HOST_USER}\n  From: {settings.DEFAULT_FROM_EMAIL}\n  To: {msg.email}", flush=True)
     try:
         email = EmailMultiAlternatives(
             subject=subject,
@@ -133,9 +133,12 @@ Please keep your ticket number handy for any follow-up.
         )
         email.attach_alternative(html_body, "text/html")
         email.send(fail_silently=False)
-        logger.info(f"User confirmation email sent successfully to {msg.email}")
+        print(f"[DEBUG EMAIL] User Confirmation Email sent successfully to {msg.email}", flush=True)
     except Exception as e:
-        logger.exception(f"Error sending user confirmation email to {msg.email}")
+        import traceback
+        print(f"[DEBUG EMAIL ERROR] Failed to send user email to {msg.email}: {e}", flush=True)
+        traceback.print_exc()
+
 
 
 
@@ -231,7 +234,7 @@ Log in to the admin panel to view and resolve this ticket.
 </html>
 """
 
-    logger.info(f"Attempting to send admin notification email. SMTP Host: {settings.EMAIL_HOST}, Port: {settings.EMAIL_PORT}, User: {settings.EMAIL_HOST_USER}, From: {settings.DEFAULT_FROM_EMAIL}, To: {admin_email}")
+    print(f"[DEBUG EMAIL] Admin Notification Email Attempt:\n  Host: {settings.EMAIL_HOST}\n  Port: {settings.EMAIL_PORT}\n  User: {settings.EMAIL_HOST_USER}\n  From: {settings.DEFAULT_FROM_EMAIL}\n  To: {admin_email}", flush=True)
     try:
         email = EmailMultiAlternatives(
             subject=subject,
@@ -241,9 +244,12 @@ Log in to the admin panel to view and resolve this ticket.
         )
         email.attach_alternative(html_body, "text/html")
         email.send(fail_silently=False)
-        logger.info(f"Admin notification email sent successfully to {admin_email}")
+        print(f"[DEBUG EMAIL] Admin Notification Email sent successfully to {admin_email}", flush=True)
     except Exception as e:
-        logger.exception(f"Error sending admin notification email to {admin_email}")
+        import traceback
+        print(f"[DEBUG EMAIL ERROR] Failed to send admin email to {admin_email}: {e}", flush=True)
+        traceback.print_exc()
+
 
 
 
@@ -263,7 +269,9 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
         # Generate unique ticket number
         ticket = generate_ticket_number()
         msg = serializer.save(ticket_number=ticket)
+        print(f"[DEBUG EMAIL] perform_create saved message. Ticket: {ticket}. Spawning email threads...", flush=True)
 
         # Fire both emails in background threads (non-blocking)
         threading.Thread(target=send_user_confirmation_email, args=(msg,), daemon=True).start()
         threading.Thread(target=send_admin_notification_email, args=(msg,), daemon=True).start()
+
