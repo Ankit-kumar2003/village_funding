@@ -30,9 +30,18 @@ class ContactMessage(models.Model):
     is_resolved = models.BooleanField(default=False)
     resolved_at = models.DateTimeField(null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        # Automatically update resolved_at timestamp based on resolution status
+        if self.is_resolved and not self.resolved_at:
+            self.resolved_at = timezone.now()
+        elif not self.is_resolved:
+            self.resolved_at = None
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.ticket_number} | {self.name} | {self.get_category_display()}"
 
     class Meta:
         ordering = ['-submitted_at']
+
 
