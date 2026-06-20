@@ -32,6 +32,7 @@ export default function Contact() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
+  const [ticketNumber, setTicketNumber] = useState('');
 
   // FAQ Accordion State
   const [openFaq, setOpenFaq] = useState(null);
@@ -101,7 +102,8 @@ export default function Contact() {
     setError(null);
 
     try {
-      await api.post('contact/', formData);
+      const res = await api.post('contact/', formData);
+      setTicketNumber(res.data.ticket_number || '');
       setSuccess(true);
       setFormData({
         name: '',
@@ -238,20 +240,36 @@ export default function Contact() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="text-center py-12"
+                    className="text-center py-10"
                   >
-                    <div className="w-20 h-20 bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner animate-bounce">
+                    <div className="w-20 h-20 bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner">
                       <CheckCircle className="w-10 h-10" />
                     </div>
-                    <h3 className="text-3xl font-bold font-heading text-[#1C1C1C] dark:text-white mb-4">
+                    <h3 className="text-2xl font-bold font-heading text-[#1C1C1C] dark:text-white mb-2">
                       {t('contactSuccessTitle')}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto mb-8 leading-relaxed">
+                    <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
                       {t('contactSuccessDesc')}
                     </p>
+
+                    {/* Ticket Number Box */}
+                    {ticketNumber && (
+                      <div className="bg-orange-50 dark:bg-orange-950/30 border-2 border-[#FF6B00] rounded-2xl px-8 py-5 mx-auto max-w-xs mb-6">
+                        <p className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-widest font-bold mb-1">Your Ticket Number</p>
+                        <p className="text-2xl font-black text-[#FF6B00] tracking-wider">{ticketNumber}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                          {formData.email
+                            ? `Confirmation sent to your email`
+                            : `Save this number for follow-up`}
+                        </p>
+                      </div>
+                    )}
+
+                    <p className="text-xs text-gray-400 mb-6">We typically respond within 24–48 hours.</p>
+
                     <button
-                      onClick={() => setSuccess(false)}
-                      className="px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-opacity-95 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 shadow-md shadow-orange-500/20 bg-[#FF6B00]"
+                      onClick={() => { setSuccess(false); setTicketNumber(''); }}
+                      className="px-6 py-3 bg-[#FF6B00] text-white rounded-xl font-bold hover:bg-opacity-95 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 shadow-md shadow-orange-500/20"
                     >
                       {t('contactSuccessBtn')}
                     </button>
