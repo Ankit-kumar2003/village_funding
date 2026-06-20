@@ -9,54 +9,10 @@ import threading
 import logging
 import os
 import requests
+from apps.notifications.emails import send_email_via_brevo_api
 
 logger = logging.getLogger(__name__)
 
-
-def send_email_via_brevo_api(subject, html_content, text_content, to_email, to_name=None):
-    api_key = os.getenv('BREVO_API_KEY')
-    if not api_key:
-        print("[BREVO API ERROR] BREVO_API_KEY environment variable is not set!", flush=True)
-        return False
-
-    sender_email = settings.DEFAULT_FROM_EMAIL or 'rise2gatheradmin@gmail.com'
-    sender_name = getattr(settings, 'VILLAGE_NAME', 'VillageFund') + " Support"
-
-    url = "https://api.brevo.com/v3/smtp/email"
-    headers = {
-        "accept": "application/json",
-        "api-key": api_key,
-        "content-type": "application/json"
-    }
-    
-    payload = {
-        "sender": {
-            "name": sender_name,
-            "email": sender_email
-        },
-        "to": [
-            {
-                "email": to_email,
-                "name": to_name or to_email
-            }
-        ],
-        "subject": subject,
-        "htmlContent": html_content,
-        "textContent": text_content
-    }
-
-    try:
-        print(f"[BREVO API] Sending email to {to_email} via HTTP API...", flush=True)
-        response = requests.post(url, json=payload, headers=headers, timeout=10)
-        if response.status_code in [200, 201, 202]:
-            print(f"[BREVO API SUCCESS] Email sent to {to_email}. Response: {response.json()}", flush=True)
-            return True
-        else:
-            print(f"[BREVO API ERROR] Failed to send email. Status code: {response.status_code}, Response: {response.text}", flush=True)
-            return False
-    except Exception as e:
-        print(f"[BREVO API ERROR] Exception occurred while sending email: {e}", flush=True)
-        return False
 
 
 

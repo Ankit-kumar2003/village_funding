@@ -6,7 +6,7 @@ from .models import Contribution, Pledge
 from .serializers import ContributionSerializer, PledgeSerializer, ContributorExportSerializer
 from apps.users.permissions import IsTreasurer, IsSuperAdmin
 from rest_framework.permissions import IsAuthenticated
-from apps.notifications.emails import send_contribution_received_email, send_contribution_status_email
+from apps.notifications.emails import send_contribution_received_email, send_contribution_status_email, send_admin_payment_alert_email
 import threading
 from .cashfree import create_cashfree_order, verify_cashfree_webhook, get_cashfree_order_status
 from django.conf import settings
@@ -64,6 +64,8 @@ class ContributionViewSet(viewsets.ModelViewSet):
         if payment_method in ['MANUAL_UPI', 'MANUAL_BANK']:
             # Send confirmation email asynchronously
             threading.Thread(target=send_contribution_received_email, args=(self.request.user, contribution)).start()
+            # Send alert email to admin asynchronously
+            threading.Thread(target=send_admin_payment_alert_email, args=(self.request.user, contribution)).start()
             
             headers = self.get_success_headers(serializer.data)
             response_serializer = self.get_serializer(contribution)
