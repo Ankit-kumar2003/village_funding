@@ -31,12 +31,28 @@ class ContactMessage(models.Model):
     resolved_at = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
+        is_new_resolution = False
+        if self.pk:
+            old_instance = ContactMessage.objects.filter(pk=self.pk).first()
+            if old_instance and self.is_resolved and not old_instance.is_resolved:
+                is_new_resolution = True
+        elif self.is_resolved:
+            is_new_resolution = True
+
         # Automatically update resolved_at timestamp based on resolution status
         if self.is_resolved and not self.resolved_at:
             self.resolved_at = timezone.now()
         elif not self.is_resolved:
             self.resolved_at = None
+
         super().save(*args, **kwargs)
+
+        if is_new_resolution and self.email:
+            # Trigger resolved email in background thread
+            from apps.contact.views import send_user_resolved_email
+            import threading
+            threading.Thread(target=send_user_resolved_email, args=(self,), daemon=True).start()
+
 
     def __str__(self):
         return f"{self.ticket_number} | {self.name} | {self.get_category_display()}"
