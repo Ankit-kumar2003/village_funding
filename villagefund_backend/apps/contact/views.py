@@ -127,9 +127,10 @@ Please keep your ticket number handy for any follow-up.
             to=[msg.email],
         )
         email.attach_alternative(html_body, "text/html")
-        email.send(fail_silently=True)
-    except Exception:
-        pass  # Never crash the main request
+        email.send(fail_silently=False)
+    except Exception as e:
+        print(f"Error sending user confirmation email: {e}")
+
 
 
 def send_admin_notification_email(msg):
@@ -231,9 +232,10 @@ Log in to the admin panel to view and resolve this ticket.
             to=[admin_email],
         )
         email.attach_alternative(html_body, "text/html")
-        email.send(fail_silently=True)
-    except Exception:
-        pass
+        email.send(fail_silently=False)
+    except Exception as e:
+        print(f"Error sending admin notification email: {e}")
+
 
 
 class ContactMessageViewSet(viewsets.ModelViewSet):
