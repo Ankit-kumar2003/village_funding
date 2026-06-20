@@ -6,6 +6,10 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.utils import timezone
 import threading
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 
 def send_user_confirmation_email(msg):
@@ -119,6 +123,7 @@ Please keep your ticket number handy for any follow-up.
 </html>
 """
 
+    logger.info(f"Attempting to send user confirmation email. SMTP Host: {settings.EMAIL_HOST}, Port: {settings.EMAIL_PORT}, User: {settings.EMAIL_HOST_USER}, From: {settings.DEFAULT_FROM_EMAIL}, To: {msg.email}")
     try:
         email = EmailMultiAlternatives(
             subject=subject,
@@ -128,8 +133,10 @@ Please keep your ticket number handy for any follow-up.
         )
         email.attach_alternative(html_body, "text/html")
         email.send(fail_silently=False)
+        logger.info(f"User confirmation email sent successfully to {msg.email}")
     except Exception as e:
-        print(f"Error sending user confirmation email: {e}")
+        logger.exception(f"Error sending user confirmation email to {msg.email}")
+
 
 
 
@@ -224,6 +231,7 @@ Log in to the admin panel to view and resolve this ticket.
 </html>
 """
 
+    logger.info(f"Attempting to send admin notification email. SMTP Host: {settings.EMAIL_HOST}, Port: {settings.EMAIL_PORT}, User: {settings.EMAIL_HOST_USER}, From: {settings.DEFAULT_FROM_EMAIL}, To: {admin_email}")
     try:
         email = EmailMultiAlternatives(
             subject=subject,
@@ -233,8 +241,10 @@ Log in to the admin panel to view and resolve this ticket.
         )
         email.attach_alternative(html_body, "text/html")
         email.send(fail_silently=False)
+        logger.info(f"Admin notification email sent successfully to {admin_email}")
     except Exception as e:
-        print(f"Error sending admin notification email: {e}")
+        logger.exception(f"Error sending admin notification email to {admin_email}")
+
 
 
 
