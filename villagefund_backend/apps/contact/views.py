@@ -269,9 +269,10 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
         # Generate unique ticket number
         ticket = generate_ticket_number()
         msg = serializer.save(ticket_number=ticket)
-        print(f"[DEBUG EMAIL] perform_create saved message. Ticket: {ticket}. Spawning email threads...", flush=True)
+        print(f"[DEBUG EMAIL] perform_create saved message. Ticket: {ticket}. Sending emails synchronously for debugging...", flush=True)
 
-        # Fire both emails in background threads (non-blocking)
-        threading.Thread(target=send_user_confirmation_email, args=(msg,), daemon=True).start()
-        threading.Thread(target=send_admin_notification_email, args=(msg,), daemon=True).start()
+        # Run synchronously for debugging (to capture tracebacks or timeouts directly in the request logs)
+        send_user_confirmation_email(msg)
+        send_admin_notification_email(msg)
+
 
