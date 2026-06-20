@@ -7,8 +7,57 @@ from django.conf import settings
 from django.utils import timezone
 import threading
 import logging
+import os
+import requests
 
 logger = logging.getLogger(__name__)
+
+
+def send_email_via_brevo_api(subject, html_content, text_content, to_email, to_name=None):
+    api_key = os.getenv('BREVO_API_KEY')
+    if not api_key:
+        print("[BREVO API ERROR] BREVO_API_KEY environment variable is not set!", flush=True)
+        return False
+
+    sender_email = settings.DEFAULT_FROM_EMAIL or 'rise2gatheradmin@gmail.com'
+    sender_name = getattr(settings, 'VILLAGE_NAME', 'VillageFund') + " Support"
+
+    url = "https://api.brevo.com/v3/smtp/email"
+    headers = {
+        "accept": "application/json",
+        "api-key": api_key,
+        "content-type": "application/json"
+    }
+    
+    payload = {
+        "sender": {
+            "name": sender_name,
+            "email": sender_email
+        },
+        "to": [
+            {
+                "email": to_email,
+                "name": to_name or to_email
+            }
+        ],
+        "subject": subject,
+        "htmlContent": html_content,
+        "textContent": text_content
+    }
+
+    try:
+        print(f"[BREVO API] Sending email to {to_email} via HTTP API...", flush=True)
+        response = requests.post(url, json=payload, headers=headers, timeout=10)
+        if response.status_code in [200, 201, 202]:
+            print(f"[BREVO API SUCCESS] Email sent to {to_email}. Response: {response.json()}", flush=True)
+            return True
+        else:
+            print(f"[BREVO API ERROR] Failed to send email. Status code: {response.status_code}, Response: {response.text}", flush=True)
+            return False
+    except Exception as e:
+        print(f"[BREVO API ERROR] Exception occurred while sending email: {e}", flush=True)
+        return False
+
 
 
 
@@ -123,21 +172,14 @@ Please keep your ticket number handy for any follow-up.
 </html>
 """
 
-    print(f"[DEBUG EMAIL] User Confirmation Email Attempt:\n  Host: {settings.EMAIL_HOST}\n  Port: {settings.EMAIL_PORT}\n  User: {settings.EMAIL_HOST_USER}\n  From: {settings.DEFAULT_FROM_EMAIL}\n  To: {msg.email}", flush=True)
-    try:
-        email = EmailMultiAlternatives(
-            subject=subject,
-            body=text_body,
-            from_email=settings.DEFAULT_FROM_EMAIL or 'noreply@villagefund.org',
-            to=[msg.email],
-        )
-        email.attach_alternative(html_body, "text/html")
-        email.send(fail_silently=False)
-        print(f"[DEBUG EMAIL] User Confirmation Email sent successfully to {msg.email}", flush=True)
-    except Exception as e:
-        import traceback
-        print(f"[DEBUG EMAIL ERROR] Failed to send user email to {msg.email}: {e}", flush=True)
-        traceback.print_exc()
+    send_email_via_brevo_api(
+        subject=subject,
+        html_content=html_body,
+        text_content=text_body,
+        to_email=msg.email,
+        to_name=msg.name
+    )
+
 
 
 
@@ -234,21 +276,13 @@ Log in to the admin panel to view and resolve this ticket.
 </html>
 """
 
-    print(f"[DEBUG EMAIL] Admin Notification Email Attempt:\n  Host: {settings.EMAIL_HOST}\n  Port: {settings.EMAIL_PORT}\n  User: {settings.EMAIL_HOST_USER}\n  From: {settings.DEFAULT_FROM_EMAIL}\n  To: {admin_email}", flush=True)
-    try:
-        email = EmailMultiAlternatives(
-            subject=subject,
-            body=text_body,
-            from_email=settings.DEFAULT_FROM_EMAIL or 'noreply@villagefund.org',
-            to=[admin_email],
-        )
-        email.attach_alternative(html_body, "text/html")
-        email.send(fail_silently=False)
-        print(f"[DEBUG EMAIL] Admin Notification Email sent successfully to {admin_email}", flush=True)
-    except Exception as e:
-        import traceback
-        print(f"[DEBUG EMAIL ERROR] Failed to send admin email to {admin_email}: {e}", flush=True)
-        traceback.print_exc()
+    send_email_via_brevo_api(
+        subject=subject,
+        html_content=html_body,
+        text_content=text_body,
+        to_email=admin_email
+    )
+
 
 
 
@@ -269,10 +303,9 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
         # Generate unique ticket number
         ticket = generate_ticket_number()
         msg = serializer.save(ticket_number=ticket)
-        print(f"[DEBUG EMAIL] perform_create saved message. Ticket: {ticket}. Sending emails synchronously for debugging...", flush=True)
+        # Fire both emails in background threads (non-blocking)
+        threading.Thread(target=send_user_confirmation_email, args=(msg,), daemon=True).start()
+        threading.Thread(target=send_admin_notification_email, args=(msg,), daemon=True).start()
 
-        # Run synchronously for debugging (to capture tracebacks or timeouts directly in the request logs)
-        send_user_confirmation_email(msg)
-        send_admin_notification_email(msg)
 
 
