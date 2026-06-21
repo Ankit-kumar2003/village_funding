@@ -207,7 +207,13 @@ class BotBrainService:
 
         except Exception as e:
             logger.error(f"Error generating AI response: {e}")
+            err_msg = str(e).lower()
+            if "429" in err_msg or "quota" in err_msg:
+                return (
+                    "⚠️ The AI Assistant's request quota has been exceeded for the minute/day on this free key. "
+                    "Please wait a brief moment and try again."
+                )
             return (
-                "Sorry, I encountered an issue accessing the database to answer your request. "
+                "Sorry, I encountered an issue answering your request. "
                 "Please try again in a few moments."
             )
