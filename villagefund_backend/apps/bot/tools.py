@@ -25,12 +25,17 @@ def get_campaigns_list() -> str:
 def get_campaign_details(campaign_title: str) -> str:
     """
     Returns detailed information about a specific campaign by searching for its title.
-    Includes description, target, raised amount, end date, status, UPI ID, and managing treasurer.
+    Includes description, target, raised amount, contributor stats, end date, status, UPI ID, and managing treasurer.
     """
     try:
         c = Campaign.objects.filter(title__icontains=campaign_title).first()
         if not c:
             return f"No campaign found matching '{campaign_title}'."
+        
+        # Calculate contribution metrics
+        approved_contributions = c.contributions.filter(status='APPROVED')
+        total_contributions_count = approved_contributions.count()
+        unique_contributors_count = approved_contributions.values('contributor').distinct().count()
         
         res = (
             f"Campaign: **{c.title}**\n"
@@ -39,6 +44,8 @@ def get_campaign_details(campaign_title: str) -> str:
             f"Description: {c.description}\n"
             f"Goal: ₹{c.goal_amount:,}\n"
             f"Raised: ₹{c.raised_amount:,}\n"
+            f"Total Approved Contributions: {total_contributions_count}\n"
+            f"Unique Contributors: {unique_contributors_count}\n"
             f"Start Date: {c.start_date} | End Date: {c.end_date}\n"
         )
         if c.campaign_upi_id:
