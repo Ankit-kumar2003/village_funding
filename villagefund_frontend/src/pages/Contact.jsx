@@ -187,8 +187,8 @@ export default function Contact() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-200">{t('contactEmailTitle')}</h3>
-                      <a href="mailto:support@villagefund.org" className="text-primary hover:underline font-medium text-[#FF6B00] mt-1 inline-block">
-                        support@villagefund.org
+                      <a href="mailto:rise2gatheradmin@gmail.com" className="text-primary hover:underline font-medium text-[#FF6B00] mt-1 inline-block">
+                        rise2gatheradmin@gmail.com
                       </a>
                     </div>
                   </div>
