@@ -116,7 +116,7 @@ export default function ChatWidget() {
                 <thead>
                   <tr>
                     {tableHeaders.map((h, i) => (
-                      <th key={i}>{h}</th>
+                      <th key={i} dangerouslySetInnerHTML={{ __html: h }} />
                     ))}
                   </tr>
                 </thead>
@@ -125,7 +125,7 @@ export default function ChatWidget() {
                 {tableRows.map((row, i) => (
                   <tr key={i}>
                     {row.map((cell, j) => (
-                      <td key={j}>{cell}</td>
+                      <td key={j} dangerouslySetInnerHTML={{ __html: cell }} />
                     ))}
                   </tr>
                 ))}
@@ -156,7 +156,10 @@ export default function ChatWidget() {
       if (line.startsWith('|')) {
         flushList(idx);
         inTable = true;
-        const cells = line.split('|').map(c => c.trim()).filter((c, i, arr) => i > 0 && i < arr.length - 1);
+        const cells = line.split('|')
+          .map(c => c.trim())
+          .filter((c, i, arr) => i > 0 && i < arr.length - 1)
+          .map(c => processInline(c));
         
         // Skip table dividers (e.g. |---|---|)
         if (cells.every(c => /^[-:]+$/.test(c))) {
@@ -185,11 +188,11 @@ export default function ChatWidget() {
       // Plain Text & Headers
       if (line) {
         if (line.startsWith('### ')) {
-          renderedElements.push(<h4 key={idx}>{processInline(line.substring(4))}</h4>);
+          renderedElements.push(<h4 key={idx} dangerouslySetInnerHTML={{ __html: processInline(line.substring(4)) }} />);
         } else if (line.startsWith('## ')) {
-          renderedElements.push(<h3 key={idx}>{processInline(line.substring(3))}</h3>);
+          renderedElements.push(<h3 key={idx} dangerouslySetInnerHTML={{ __html: processInline(line.substring(3)) }} />);
         } else if (line.startsWith('# ')) {
-          renderedElements.push(<h2 key={idx}>{processInline(line.substring(2))}</h2>);
+          renderedElements.push(<h2 key={idx} dangerouslySetInnerHTML={{ __html: processInline(line.substring(2)) }} />);
         } else {
           renderedElements.push(
             <p key={idx} dangerouslySetInnerHTML={{ __html: processInline(line) }} />
