@@ -10,6 +10,9 @@ from decouple import config
 from gtts import gTTS
 
 from apps.bot.services import BotBrainService
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
 logger = logging.getLogger(__name__)
 
@@ -168,3 +171,25 @@ def telegram_webhook(request):
     except Exception as e:
         logger.error(f"Telegram webhook error: {e}")
         return HttpResponse("OK") # Always return 200 to Telegram to prevent webhook retries
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def web_chat(request):
+    """API endpoint for the web chatbot interface."""
+    user_message = request.data.get('message', '')
+    session_id = request.data.get('session_id', 'web_anonymous_session')
+    
+    if not user_message:
+        return Response({"error": "Message is required"}, status=400)
+    
+    # If user is authenticated, associate session with user ID for history & user-specific RAG/Tools
+    if request.user and request.user.is_authenticated:
+        session_id = f"web_user_{request.user.id}"
+        
+    try:
+        reply_text = bot_service.answer_question(user_message, session_id)
+        return Response({"response": reply_text})
+    except Exception as e:
+        logger.error(f"Web chat error: {e}")
+        return Response({"error": "Failed to process chat"}, status=500)

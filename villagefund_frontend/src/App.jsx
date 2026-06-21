@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
 import ProtectedRoute from './components/layout/ProtectedRoute';
+import ChatWidget from './components/bot/ChatWidget';
 
 // Public Pages
 import Home from './pages/Home';
@@ -70,6 +71,7 @@ function App() {
             </Routes>
           </main>
           <Footer />
+          <ChatWidget />
         </div>
       </Router>
         </AuthProvider>
