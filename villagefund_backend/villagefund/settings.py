@@ -56,7 +56,9 @@ INSTALLED_APPS = [
     'apps.reports',
     'apps.transparency',
     'apps.contact',
+    'apps.bot',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -19,7 +19,9 @@ urlpatterns = [
     path('api/', include('apps.notifications.urls')),
     path('api/', include('apps.badges.urls')),
     path('api/', include('apps.transparency.urls')),
+    path('api/bot/', include('apps.bot.urls')),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
