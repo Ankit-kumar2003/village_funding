@@ -20,6 +20,7 @@ export default function ContributionForm({ campaign, campaignId }) {
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [copied, setCopied] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -193,7 +194,11 @@ export default function ContributionForm({ campaign, campaignId }) {
 
               <div className="flex flex-col sm:flex-row items-center gap-4 bg-background p-4 rounded-xl border border-border">
                 {campaign?.campaign_qr_image ? (
-                  <div className="w-24 h-24 bg-white p-1 rounded-lg border border-border flex items-center justify-center shrink-0">
+                  <div 
+                    onClick={() => setShowQRModal(true)}
+                    className="w-24 h-24 bg-white p-1 rounded-lg border border-border flex items-center justify-center shrink-0 cursor-zoom-in hover:opacity-85 transition-opacity"
+                    title="Click to enlarge"
+                  >
                     <img
                       src={campaign.campaign_qr_image}
                       alt="UPI QR Code"
@@ -268,6 +273,45 @@ export default function ContributionForm({ campaign, campaignId }) {
             }
           </button>
         </form>
+      )}
+
+      {showQRModal && campaign?.campaign_qr_image && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+          onClick={() => setShowQRModal(false)}
+        >
+          <div 
+            className="bg-surface p-6 rounded-3xl border border-border max-w-sm w-full flex flex-col items-center relative shadow-2xl text-center text-text"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setShowQRModal(false)}
+              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-background transition-colors text-text-muted hover:text-text"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            <h4 className="font-heading font-bold text-lg mb-2 text-text mt-2">Scan QR Code</h4>
+            <p className="text-xs text-text-muted mb-6">Scan this QR code using any UPI app (GPay, PhonePe, Paytm, etc.) to pay.</p>
+            
+            <div className="bg-white p-4 rounded-2xl shadow-inner border border-border mb-6 flex items-center justify-center w-64 h-64">
+              <img 
+                src={campaign.campaign_qr_image} 
+                alt="Enlarged UPI QR Code" 
+                className="w-full h-full object-contain"
+              />
+            </div>
+            
+            <div className="w-full bg-background p-3 rounded-xl border border-border text-center">
+              <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider block mb-1">UPI ID</span>
+              <code className="font-mono text-sm text-text font-bold break-all select-all">
+                {campaign?.campaign_upi_id || 'mahuaafund@okaxis'}
+              </code>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
