@@ -23,6 +23,23 @@ class Expense(models.Model):
     requires_multi_sig = models.BooleanField(default=False)
     approval_count = models.IntegerField(default=0)
 
+    def save(self, *args, **kwargs):
+        is_new_approved = False
+        if self.pk:
+            old_instance = Expense.objects.filter(pk=self.pk).first()
+            if old_instance and self.approval_status == 'APPROVED' and old_instance.approval_status != 'APPROVED':
+                is_new_approved = True
+        elif self.approval_status == 'APPROVED':
+            is_new_approved = True
+            
+        super().save(*args, **kwargs)
+        
+        if is_new_approved:
+            from apps.notifications.emails import broadcast_expense_posted
+            import threading
+            threading.Thread(target=broadcast_expense_posted, args=(self.id,), daemon=True).start()
+
+
 class ExpenseApproval(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     expense = models.ForeignKey(Expense, on_delete=models.CASCADE, related_name='approvals')

@@ -40,6 +40,37 @@ class Campaign(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        is_new_active = False
+        is_date_extended = False
+        old_end_date = None
+        
+        if self.pk:
+            old_instance = Campaign.objects.filter(pk=self.pk).first()
+            if old_instance:
+                if self.status == 'ACTIVE' and old_instance.status != 'ACTIVE':
+                    is_new_active = True
+                if self.end_date > old_instance.end_date and old_instance.status in ['ACTIVE', 'VOTING']:
+                    is_date_extended = True
+                    old_end_date = old_instance.end_date
+        elif self.status == 'ACTIVE':
+            is_new_active = True
+            
+        super().save(*args, **kwargs)
+        
+        if is_new_active:
+            from apps.notifications.emails import broadcast_new_campaign
+            import threading
+            threading.Thread(target=broadcast_new_campaign, args=(self.id,), daemon=True).start()
+            
+        if is_date_extended and old_end_date:
+            from apps.notifications.emails import broadcast_campaign_date_extended
+            import threading
+            old_date_str = old_end_date.strftime('%d %b %Y')
+            new_date_str = self.end_date.strftime('%d %b %Y')
+            threading.Thread(target=broadcast_campaign_date_extended, args=(self.id, old_date_str, new_date_str), daemon=True).start()
+
+
 class CampaignMilestone(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='milestones')
@@ -65,6 +96,15 @@ class CampaignUpdate(models.Model):
     photo = models.ImageField(upload_to='campaigns/updates/', null=True, blank=True)
     video_url = models.URLField(max_length=500, null=True, blank=True)
     posted_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        if is_new:
+            from apps.notifications.emails import broadcast_campaign_update
+            import threading
+            threading.Thread(target=broadcast_campaign_update, args=(self.id,), daemon=True).start()
+
 
 class CampaignVote(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

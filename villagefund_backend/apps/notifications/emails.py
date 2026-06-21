@@ -353,3 +353,366 @@ Please check the treasurer admin panel to verify and approve/reject this contrib
         text_content=text_body,
         to_email=admin_email
     )
+
+def broadcast_new_campaign(campaign_id):
+    from apps.users.models import User
+    from apps.campaigns.models import Campaign
+    from apps.notifications.models import Notification
+    
+    try:
+        campaign = Campaign.objects.get(id=campaign_id)
+    except Campaign.DoesNotExist:
+        return
+        
+    active_users = User.objects.filter(is_active=True)
+    
+    subject = f"📢 New Campaign Launched: {campaign.title} | VillageFund"
+    body = f"A new fundraising campaign has been launched: {campaign.title}.\n\nGoal Amount: ₹{campaign.goal_amount}\nCategory: {campaign.get_category_display()}\n\nVisit the portal to learn more and contribute!"
+    
+    html_body = f"""
+<!DOCTYPE html>
+<html>
+<body style="font-family:Arial,sans-serif;background:#f5f5f5;padding:40px 20px;margin:0;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);overflow:hidden;">
+          <tr>
+            <td style="background:#1A6B3C;padding:32px 40px;text-align:center;">
+              <h1 style="margin:0;color:#ffffff;font-size:24px;">New Campaign Launched</h1>
+              <p style="margin:8px 0 0;color:#a7f3d0;font-size:14px;">VillageFund Announcement</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:40px;">
+              <h2 style="margin:0 0 16px;color:#222;font-size:20px;">{campaign.title}</h2>
+              <p style="font-size:15px;color:#555;line-height:1.6;margin:0 0 24px;">
+                We are excited to announce a new community campaign: <strong>{campaign.title}</strong>.
+              </p>
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#F4FBF7;border:1px solid #1A6B3C;border-radius:10px;margin:0 0 24px;padding:20px;">
+                <tr>
+                  <td>
+                    <span style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px;">Goal Amount</span>
+                    <p style="font-size:24px;font-weight:bold;color:#1A6B3C;margin:4px 0 0;">₹{campaign.goal_amount}</p>
+                  </td>
+                  <td align="right">
+                    <span style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px;">Category</span>
+                    <p style="font-size:16px;font-weight:bold;color:#222;margin:4px 0 0;">{campaign.get_category_display()}</p>
+                  </td>
+                </tr>
+              </table>
+              <p style="font-size:14px;color:#555;line-height:1.6;margin:0 0 24px;">
+                {campaign.description[:250]}...
+              </p>
+              <hr style="border:none;border-top:1px solid #eee;margin:0 0 24px;">
+              <p style="font-size:13px;color:#aaa;margin:0;">Thank you for helping us support our village!</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+"""
+    
+    for user in active_users:
+        # Create in-app notification
+        Notification.objects.create(
+            recipient=user,
+            title=f"New Campaign: {campaign.title}",
+            body=f"A new campaign '{campaign.title}' has been launched with a goal of ₹{campaign.goal_amount}.",
+            type='NEW_CAMPAIGN',
+            campaign=campaign
+        )
+        # Send email
+        if user.email:
+            send_email_via_brevo_api(subject, html_body, body, user.email, user.full_name)
+
+
+def broadcast_campaign_date_extended(campaign_id, old_date_str, new_date_str):
+    from apps.users.models import User
+    from apps.campaigns.models import Campaign
+    from apps.notifications.models import Notification
+    
+    try:
+        campaign = Campaign.objects.get(id=campaign_id)
+    except Campaign.DoesNotExist:
+        return
+        
+    active_users = User.objects.filter(is_active=True)
+    
+    subject = f"📅 Deadline Extended: {campaign.title} | VillageFund"
+    body = f"The deadline for the campaign '{campaign.title}' has been extended from {old_date_str} to {new_date_str}.\n\nThere is still time to support this cause. Visit the portal to view progress or contribute!"
+    
+    html_body = f"""
+<!DOCTYPE html>
+<html>
+<body style="font-family:Arial,sans-serif;background:#f5f5f5;padding:40px 20px;margin:0;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);overflow:hidden;">
+          <tr>
+            <td style="background:#FF6B00;padding:32px 40px;text-align:center;">
+              <h1 style="margin:0;color:#ffffff;font-size:24px;">Deadline Extended</h1>
+              <p style="margin:8px 0 0;color:#ffe0cc;font-size:14px;">Campaign Update</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:40px;">
+              <h2 style="margin:0 0 16px;color:#222;font-size:18px;">{campaign.title}</h2>
+              <p style="font-size:15px;color:#555;line-height:1.6;margin:0 0 24px;">
+                Good news! To give everyone a chance to participate and meet our community goals, the deadline for the campaign <strong>{campaign.title}</strong> has been extended.
+              </p>
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#FFF8F3;border:1px solid #FF6B00;border-radius:10px;margin:0 0 24px;padding:20px;text-align:center;">
+                <tr>
+                  <td>
+                    <span style="font-size:11px;color:#888;text-transform:uppercase;">Original Deadline</span>
+                    <p style="font-size:16px;text-decoration:line-through;color:#c0392b;margin:4px 0 0;">{old_date_str}</p>
+                  </td>
+                  <td style="font-size:20px;color:#FF6B00;font-weight:bold;">➔</td>
+                  <td>
+                    <span style="font-size:11px;color:#888;text-transform:uppercase;font-weight:bold;">New Deadline</span>
+                    <p style="font-size:18px;font-weight:bold;color:#1A6B3C;margin:4px 0 0;">{new_date_str}</p>
+                  </td>
+                </tr>
+              </table>
+              <p style="font-size:14px;color:#555;line-height:1.6;margin:0 0 24px;">
+                Visit the platform to view the current progress or make a contribution.
+              </p>
+              <hr style="border:none;border-top:1px solid #eee;margin:0 0 24px;">
+              <p style="font-size:13px;color:#aaa;margin:0;">Thank you for your continuous support!</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+"""
+    
+    for user in active_users:
+        Notification.objects.create(
+            recipient=user,
+            title=f"Deadline Extended: {campaign.title}",
+            body=f"The deadline for '{campaign.title}' has been extended to {new_date_str}.",
+            type='PLEDGE_DUE',
+            campaign=campaign
+        )
+        if user.email:
+            send_email_via_brevo_api(subject, html_body, body, user.email, user.full_name)
+
+
+def broadcast_expense_posted(expense_id):
+    from apps.users.models import User
+    from apps.expenses.models import Expense
+    from apps.notifications.models import Notification
+    
+    try:
+        expense = Expense.objects.select_related('campaign').get(id=expense_id)
+    except Expense.DoesNotExist:
+        return
+        
+    campaign = expense.campaign
+    active_users = User.objects.filter(is_active=True)
+    
+    subject = f"💸 New Expense Approved: {expense.description[:30]} | {campaign.title}"
+    body = f"An expense of ₹{expense.amount} has been approved and posted for the campaign '{campaign.title}'.\n\nDescription: {expense.description}\nCategory: {expense.category}\n\nWe maintain 100% transparency in all village fund expenditures. Visit the Transparency dashboard to view receipts and invoice details."
+    
+    html_body = f"""
+<!DOCTYPE html>
+<html>
+<body style="font-family:Arial,sans-serif;background:#f5f5f5;padding:40px 20px;margin:0;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);overflow:hidden;">
+          <tr>
+            <td style="background:#C0392B;padding:32px 40px;text-align:center;">
+              <h1 style="margin:0;color:#ffffff;font-size:24px;">Expense Disbursed</h1>
+              <p style="margin:8px 0 0;color:#f9d5d5;font-size:14px;">Transparency Update</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:40px;">
+              <h2 style="margin:0 0 16px;color:#222;font-size:18px;">{campaign.title}</h2>
+              <p style="font-size:15px;color:#555;line-height:1.6;margin:0 0 24px;">
+                An expense has been approved and successfully posted under the campaign <strong>{campaign.title}</strong>.
+              </p>
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#FDEDEC;border:1px solid #C0392B;border-radius:10px;margin:0 0 24px;padding:20px;">
+                <tr>
+                  <td>
+                    <span style="font-size:11px;color:#888;text-transform:uppercase;">Expense Amount</span>
+                    <p style="font-size:24px;font-weight:bold;color:#C0392B;margin:4px 0 0;">₹{expense.amount}</p>
+                  </td>
+                  <td align="right">
+                    <span style="font-size:11px;color:#888;text-transform:uppercase;">Category</span>
+                    <p style="font-size:16px;font-weight:bold;color:#222;margin:4px 0 0;">{expense.category}</p>
+                  </td>
+                </tr>
+              </table>
+              <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:0 0 24px;">
+                <tr>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;color:#888;width:130px;">Description</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;color:#333;font-weight:bold;">{expense.description}</td>
+                </tr>
+              </table>
+              <p style="font-size:14px;color:#555;line-height:1.6;margin:0 0 24px;">
+                To view the receipt, bills, and approval signatures, head to the Transparency section on our portal.
+              </p>
+              <hr style="border:none;border-top:1px solid #eee;margin:0 0 24px;">
+              <p style="font-size:13px;color:#aaa;margin:0;">VillageFund - 100% Transparent Community Funding</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+"""
+    
+    for user in active_users:
+        Notification.objects.create(
+            recipient=user,
+            title=f"Expense Posted: {expense.description[:40]}",
+            body=f"An expense of ₹{expense.amount} was posted for '{campaign.title}'.",
+            type='EXPENSE_POSTED',
+            campaign=campaign
+        )
+        if user.email:
+            send_email_via_brevo_api(subject, html_body, body, user.email, user.full_name)
+
+
+def broadcast_campaign_update(campaign_update_id):
+    from apps.users.models import User
+    from apps.campaigns.models import CampaignUpdate
+    from apps.notifications.models import Notification
+    
+    try:
+        update = CampaignUpdate.objects.select_related('campaign').get(id=campaign_update_id)
+    except CampaignUpdate.DoesNotExist:
+        return
+        
+    campaign = update.campaign
+    active_users = User.objects.filter(is_active=True)
+    
+    subject = f"📝 Campaign Update: {update.title} | {campaign.title}"
+    body = f"A new update has been posted for the campaign '{campaign.title}': {update.title}\n\n{update.body}\n\nVisit the portal to see the full details and progress."
+    
+    html_body = f"""
+<!DOCTYPE html>
+<html>
+<body style="font-family:Arial,sans-serif;background:#f5f5f5;padding:40px 20px;margin:0;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);overflow:hidden;">
+          <tr>
+            <td style="background:#1A6B3C;padding:32px 40px;text-align:center;">
+              <h1 style="margin:0;color:#ffffff;font-size:24px;">Campaign Update</h1>
+              <p style="margin:8px 0 0;color:#a7f3d0;font-size:14px;">{campaign.title}</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:40px;">
+              <h2 style="margin:0 0 16px;color:#222;font-size:18px;">{update.title}</h2>
+              <p style="font-size:15px;color:#555;line-height:1.6;margin:0 0 24px;white-space:pre-wrap;">
+{update.body}
+              </p>
+              <hr style="border:none;border-top:1px solid #eee;margin:0 0 24px;">
+              <p style="font-size:13px;color:#aaa;margin:0;">Thank you for following along with our community achievements!</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+"""
+    
+    for user in active_users:
+        Notification.objects.create(
+            recipient=user,
+            title=f"Campaign Update: {update.title[:40]}",
+            body=f"An update '{update.title}' was posted for '{campaign.title}'.",
+            type='NEW_CAMPAIGN',
+            campaign=campaign
+        )
+        if user.email:
+            send_email_via_brevo_api(subject, html_body, body, user.email, user.full_name)
+
+
+def broadcast_campaign_reminder(campaign_id, reminder_title, reminder_body):
+    from apps.users.models import User
+    from apps.campaigns.models import Campaign
+    from apps.notifications.models import Notification
+    
+    try:
+        campaign = Campaign.objects.get(id=campaign_id)
+    except Campaign.DoesNotExist:
+        return
+        
+    active_users = User.objects.filter(is_active=True)
+    
+    subject = f"🔔 Reminder: {reminder_title} | {campaign.title}"
+    body = f"{reminder_body}\n\nVisit the portal to support '{campaign.title}' and help us reach the community goal."
+    
+    html_body = f"""
+<!DOCTYPE html>
+<html>
+<body style="font-family:Arial,sans-serif;background:#f5f5f5;padding:40px 20px;margin:0;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);overflow:hidden;">
+          <tr>
+            <td style="background:#FF6B00;padding:32px 40px;text-align:center;">
+              <h1 style="margin:0;color:#ffffff;font-size:24px;">Community Reminder</h1>
+              <p style="margin:8px 0 0;color:#ffe0cc;font-size:14px;">{campaign.title}</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:40px;">
+              <h2 style="margin:0 0 16px;color:#222;font-size:18px;">{reminder_title}</h2>
+              <p style="font-size:15px;color:#555;line-height:1.6;margin:0 0 24px;white-space:pre-wrap;">
+{reminder_body}
+              </p>
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#FFF8F3;border-radius:10px;margin:0 0 24px;padding:20px;border:1px solid #FF6B00;">
+                <tr>
+                  <td>
+                    <span style="font-size:11px;color:#888;text-transform:uppercase;">Goal</span>
+                    <p style="font-size:18px;font-weight:bold;color:#222;margin:4px 0 0;">₹{campaign.goal_amount}</p>
+                  </td>
+                  <td>
+                    <span style="font-size:11px;color:#888;text-transform:uppercase;">Raised So Far</span>
+                    <p style="font-size:18px;font-weight:bold;color:#1A6B3C;margin:4px 0 0;">₹{campaign.raised_amount}</p>
+                  </td>
+                </tr>
+              </table>
+              <hr style="border:none;border-top:1px solid #eee;margin:0 0 24px;">
+              <p style="font-size:13px;color:#aaa;margin:0;">Thank you for your generous participation in our village projects!</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+"""
+    
+    for user in active_users:
+        Notification.objects.create(
+            recipient=user,
+            title=reminder_title,
+            body=reminder_body[:120] + "..." if len(reminder_body) > 120 else reminder_body,
+            type='PLEDGE_DUE',
+            campaign=campaign
+        )
+        if user.email:
+            send_email_via_brevo_api(subject, html_body, body, user.email, user.full_name)
+
