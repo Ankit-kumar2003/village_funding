@@ -108,7 +108,7 @@ def telegram_webhook(request):
             # Handle start command
             if user_text.strip() == '/start':
                 welcome_text = (
-                    "👋 **Welcome to the VillageFund AI Assistant!**\n\n"
+                    "👋 **Welcome to the MahuaaMitra AI BOT!**\n\n"
                     "I am here to help you transparently monitor village finances, campaign progress, and guidelines.\n\n"
                     "Ask me questions like:\n"
                     "- *What is the reserve balance?*\n"

@@ -15,7 +15,7 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState([
     {
       sender: 'bot',
-      text: 'Hi there! 👋 I am the VillageFund AI Assistant. Ask me anything about active campaigns, approved expenses, support tickets, or the village financial reserves!'
+      text: 'Hi there! 👋 I am MahuaaMitra AI BOT, your VillageFund companion. Ask me anything about active campaigns, approved expenses, support tickets, or the village financial reserves!'
     }
   ]);
   const [input, setInput] = useState('');
@@ -226,7 +226,7 @@ export default function ChatWidget() {
               <span className="bot-online-indicator" />
             </div>
             <div>
-              <h3>VillageFund Assistant</h3>
+              <h3>MahuaaMitra AI BOT</h3>
               <p>AI Helper • Online</p>
             </div>
             <button onClick={() => setIsOpen(false)} className="bot-close-btn">
