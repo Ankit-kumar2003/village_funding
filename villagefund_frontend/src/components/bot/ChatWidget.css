@@ -423,3 +423,74 @@
     bottom: 70px;
   }
 }
+
+/* 3. Dark Mode Overrides */
+.dark .bot-chat-window {
+  background: rgba(15, 23, 42, 0.85); /* slate-900 with transparency */
+  border: 1px solid rgba(51, 65, 85, 0.5); /* slate-700 */
+  color: #f8fafc; /* slate-50 */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.dark .bot-chat-header {
+  border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+}
+
+.dark .bot-chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.dark .bot-chat-bubble-row.bot .bot-chat-msg-body {
+  background: rgba(30, 41, 59, 0.85); /* slate-800 */
+  color: #f1f5f9; /* slate-100 */
+  border: 1px solid rgba(51, 65, 85, 0.6);
+}
+
+.dark .bot-chat-bubble-row.bot .bot-chat-msg-body.loading {
+  background: rgba(30, 41, 59, 0.6);
+}
+
+.dark .bot-msg-table-wrapper {
+  border-color: rgba(51, 65, 85, 0.8);
+}
+
+.dark .bot-msg-table th {
+  background: rgba(51, 65, 85, 0.4);
+}
+
+.dark .bot-msg-table th, 
+.dark .bot-msg-table td {
+  border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+}
+
+.dark .bot-chat-suggestions {
+  background: transparent;
+}
+
+.dark .bot-suggestion-pill {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #818cf8; /* indigo-400 */
+}
+
+.dark .bot-suggestion-pill:hover {
+  background: #4f46e5;
+  color: #ffffff;
+  border-color: #4f46e5;
+}
+
+.dark .bot-chat-footer {
+  background: rgba(15, 23, 42, 0.95);
+  border-top: 1px solid rgba(51, 65, 85, 0.8);
+}
+
+.dark .bot-chat-footer input {
+  background: #1e293b; /* slate-800 */
+  border: 1px solid #334155; /* slate-700 */
+  color: #f8fafc; /* slate-50 (This fixes the hidden text issue) */
+}
+
+.dark .bot-chat-footer input:focus {
+  border-color: #818cf8;
+  background: #0f172a; /* slate-950 */
+}
