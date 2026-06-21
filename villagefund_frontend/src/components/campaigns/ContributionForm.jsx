@@ -125,33 +125,6 @@ export default function ContributionForm({ campaign, campaignId }) {
               {successMsg}
             </div>
           )}
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-bold text-text-muted uppercase mb-1.5">{t('amountLabel')}</label>
-              <input 
-                type="number" 
-                name="amount" 
-                className="w-full px-4 py-3 border border-border bg-background rounded-2xl text-text focus:ring-1 focus:ring-primary focus:border-primary outline-none font-bold text-sm"
-                value={formData.amount} 
-                onChange={handleChange} 
-                min="1"
-                required 
-              />
-            </div>
-            
-            <div>
-              <label className="block text-xs font-bold text-text-muted uppercase mb-1.5">{t('noteLabel')}</label>
-              <input 
-                type="text"
-                name="note" 
-                className="w-full px-4 py-3 border border-border bg-background rounded-2xl text-text focus:ring-1 focus:ring-primary focus:border-primary outline-none text-sm"
-                value={formData.note} 
-                onChange={handleChange} 
-              />
-            </div>
-          </div>
-
           <div>
             <label className="block text-xs font-bold text-text-muted uppercase mb-2">
               {t('paymentMethodLabel')}
@@ -184,6 +157,33 @@ export default function ContributionForm({ campaign, campaignId }) {
               </button>
             </div>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-text-muted uppercase mb-1.5">{t('amountLabel')}</label>
+              <input 
+                type="number" 
+                name="amount" 
+                className="w-full px-4 py-3 border border-border bg-background rounded-2xl text-text focus:ring-1 focus:ring-primary focus:border-primary outline-none font-bold text-sm"
+                value={formData.amount} 
+                onChange={handleChange} 
+                min="1"
+                required 
+              />
+            </div>
+            
+            <div>
+              <label className="block text-xs font-bold text-text-muted uppercase mb-1.5">{t('noteLabel')}</label>
+              <input 
+                type="text"
+                name="note" 
+                className="w-full px-4 py-3 border border-border bg-background rounded-2xl text-text focus:ring-1 focus:ring-primary focus:border-primary outline-none text-sm"
+                value={formData.note} 
+                onChange={handleChange} 
+              />
+            </div>
+          </div>
+
 
           {paymentMethod === 'MANUAL_UPI' && (
             <div className="bg-background/40 p-5 rounded-2xl border border-border space-y-4">
